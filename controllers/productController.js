@@ -17,4 +17,11 @@ route.get('/:id', async(req, res) => {
   res.status(OK).json(findProduct);
 });
 
+route.post('/', async(req, res) => { 
+  const { name, quantity } = req.body;
+  const newProduct = await ProductService.postProductdByName(name, quantity);
+  if (!newProduct) return res.status(409).json({ message: 'Product already exists' });
+  res.status(201).json(newProduct);
+});
+
 module.exports = route;
