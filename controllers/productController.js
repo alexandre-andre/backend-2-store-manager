@@ -1,6 +1,7 @@
 const route = require('express').Router();
 // const rescue = require('express-rescue');
 const ProductService = require('../services/productService');
+// const { validateProducts } = require('../middlewares/productsMiddleware');
 const { STATUS } = require('../utils');
 const { OK, NOT_FOUND } = STATUS;
 
