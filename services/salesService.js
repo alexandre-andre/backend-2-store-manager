@@ -10,7 +10,19 @@ const getSaleById = async (id) => {
   return response;
 };
 
+const registerSale = async () => {
+  const idSale = await SalesModel.registerSale();
+  return idSale;
+};
+
+const postSale = async (saleId, productId, quantity) => {
+  const response = await SalesModel.postSale(saleId, productId, quantity);
+  return response;
+};
+
 module.exports = {
   getAllsales,
-  getSaleById
+  getSaleById,
+  registerSale,
+  postSale
 };

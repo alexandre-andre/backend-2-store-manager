@@ -27,7 +27,27 @@ const getSalesById = async (id) => {
   return serializeById(sale);
 }
 
+const updateStockAfterSale = async (id, quantity) => {
+  const query = `UPDATE products SET quantity = quantity - ? WHERE id = ?;`;
+  await connection.execute(query, [quantity, id]);
+};
+
+const registerSale = async () => {
+  const [{ insertId }] = await connection.execute('INSERT INTO sales(date) VALUES(now())');
+  return insertId;
+};
+
+const postSale = async (saleId, productId, quantity) => {
+  await updateStockAfterSale(productId, quantity);
+  const query = `INSERT INTO sales_products(sale_id, product_id, quantity) VALUES(?, ?, ?);`;
+  await connection.execute(query, [saleId, productId, quantity]);
+
+  return { productId, quantity };
+};
+
 module.exports = {
   getAllSales,
   getSalesById,
+  registerSale,
+  postSale,
 }
