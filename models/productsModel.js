@@ -34,14 +34,19 @@ const postProductdByName = async (name, quantity) => {
 
 const putProduct = async (id, name, quantity) => {
   const query = `
-    UPDATE products SET name = ?, quantity = ? WHERE id = ?;
+    
   `;
   await connection.execute(query, [name, quantity, id]);
 };
+
+const deleteProductById = async (id) => {
+  await connection.execute('DELETE FROM products WHERE id = ?', [id]);
+}
 
 module.exports = {
   getAllProducts,
   getProductById,
   postProductdByName,
-  putProduct
+  putProduct,
+  deleteProductById
 }

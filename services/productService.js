@@ -27,10 +27,15 @@ const putProduct = async (id, name, quantity) => {
   return { id: Number(id), name, quantity };
 };
 
+const deleteProductById = async (id) => {
+  await ProductsModel.deleteProductById(id);
+}
+
 module.exports = {
   getAllProducts,
   getProductById,
   getProductByName,
   postProductdByName,
-  putProduct
+  putProduct,
+  deleteProductById,
 };
