@@ -7,11 +7,13 @@ const getAllProducts =  async () => {
 
 const getProductById = async (id) => {
   const response = await ProductsModel.getProductById(id);
+  if (!response) return null;
   return response;
 };
 
 const getProductByName = async (name) => {
   const response = await ProductsModel.getProductByName(name);
+  if (!response) return null;
   return response;
 };
 
@@ -20,9 +22,15 @@ const postProductdByName = async (name, quantity) => {
   return response;
 }
 
+const putProduct = async (id, name, quantity) => {
+  await ProductsModel.putProduct(id, name, quantity);
+  return { id: Number(id), name, quantity };
+};
+
 module.exports = {
   getAllProducts,
+  getProductById,
   getProductByName,
-  getProductByName,
-  postProductdByName
+  postProductdByName,
+  putProduct
 };

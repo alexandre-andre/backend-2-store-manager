@@ -10,21 +10,15 @@ const getProductById = async (id) => {
   const [[product]] = await connection.execute(
     `SELECT * FROM products WHERE id = ?`, [id]
   );
-
-  if (!product) return null;
-
   return product;
-}
+};
 
 const getProductByName = async (name) => {
   const [[product]] = await connection.execute(
     `SELECT * FROM products WHERE name = ?`, [name]
   );
-
-  if (!product) return null;
-
   return product;
-}
+};
 
 const postProductdByName = async (name, quantity) => {
   let productByName = await getProductByName(name);
@@ -38,8 +32,16 @@ const postProductdByName = async (name, quantity) => {
   return productByName;
 };
 
+const putProduct = async (id, name, quantity) => {
+  const query = `
+    UPDATE products SET name = ?, quantity = ? WHERE id = ?;
+  `;
+  await connection.execute(query, [name, quantity, id]);
+};
+
 module.exports = {
   getAllProducts,
   getProductById,
   postProductdByName,
+  putProduct
 }
