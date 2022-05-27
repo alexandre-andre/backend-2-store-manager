@@ -17,12 +17,18 @@ const STATUS = {
   NO_CONTENT: 204,
   BAD_REQUEST: 400,
   NOT_FOUND: 404,
+  CONFLICT: 409,
   UNPROCESSABLE_ENTITY: 422
 };
 
-const MESSAGES = {
+const MSG_PRODUCT = {
   NOT_FOUND: 'Product not found',
-}
+  ALREADY_EXISTS: 'Product already exists'
+};
+
+const MSG_SALE = {
+  NOT_FOUND: 'Sale not found',
+};
 
 const MIN_LENGTH_NAME = 5;
 const MIN_QUANTITY = 0;
@@ -34,7 +40,8 @@ module.exports = {
   serializeAllSales,
   serializeById,
   STATUS,
-  MESSAGES,
+  MSG_PRODUCT,
+  MSG_SALE,
   MIN_LENGTH_NAME,
   MIN_QUANTITY,
   blank,
