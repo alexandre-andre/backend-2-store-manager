@@ -43,10 +43,8 @@ const registerSale = async () => {
 };
 
 const postSale = async (saleId, productId, quantity) => {
-  await updateStockAfterSale(productId, quantity);
   const query = `INSERT INTO sales_products(sale_id, product_id, quantity) VALUES(?, ?, ?);`;
   await connection.execute(query, [saleId, productId, quantity]);
-
   return { productId, quantity };
 };
 
@@ -62,5 +60,6 @@ module.exports = {
   registerSale,
   postSale,
   putSale,
+  updateStockAfterSale,
   updateStockAfterSaleReintegration,
 };

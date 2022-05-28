@@ -16,6 +16,7 @@ const registerSale = async () => {
 };
 
 const postSale = async (saleId, productId, quantity) => {
+  await SalesModel.updateStockAfterSale(productId, quantity);
   const response = await SalesModel.postSale(saleId, productId, quantity);
   return response;
 };
