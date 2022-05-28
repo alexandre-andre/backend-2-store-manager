@@ -25,10 +25,15 @@ const getSalesById = async (id) => {
   if (!sale) return null;
 
   return serializeById(sale);
-}
+};
 
 const updateStockAfterSale = async (id, quantity) => {
   const query = `UPDATE products SET quantity = quantity - ? WHERE id = ?;`;
+  await connection.execute(query, [quantity, id]);
+};
+
+const updateStockAfterSaleReintegration = async (id, quantity) => {
+  const query = `UPDATE products SET quantity = quantity + ? WHERE id = ?;`;
   await connection.execute(query, [quantity, id]);
 };
 
@@ -45,9 +50,17 @@ const postSale = async (saleId, productId, quantity) => {
   return { productId, quantity };
 };
 
+const putSale = async (saleId, productId, quantity) => {
+  const query = `UPDATE sales_products SET quantity = ? WHERE sale_id = ? AND product_id = ?;`;
+  await connection.execute(query, [quantity,  saleId, productId]);
+  return { productId, quantity };
+};
+
 module.exports = {
   getAllSales,
   getSalesById,
   registerSale,
   postSale,
-}
+  putSale,
+  updateStockAfterSaleReintegration,
+};

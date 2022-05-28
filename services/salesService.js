@@ -20,9 +20,22 @@ const postSale = async (saleId, productId, quantity) => {
   return response;
 };
 
+const putSale = async (saleId, productId, quantity) => {
+  const sales = await SalesModel.getSalesById(saleId);
+  const e = sales.find(e => e.productId === productId);
+  const quantityToReintegrate = e.quantity - quantity; 
+
+  await SalesModel.updateStockAfterSaleReintegration(saleId, quantityToReintegrate);
+
+  const response = await SalesModel.putSale(saleId, productId, quantity);
+
+  return response;
+};
+
 module.exports = {
   getAllsales,
   getSaleById,
   registerSale,
-  postSale
+  postSale,
+  putSale,
 };

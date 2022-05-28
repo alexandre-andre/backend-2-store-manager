@@ -28,4 +28,16 @@ route.post('/', async(req, res) => {
   res.status(CREATED).json(postsSales);
 });
 
+route.put('/:id', async(req, res) => {
+  const { id } = req.params;
+  const saleId = Number(id);
+  const mapPutsSales = await Promise.all(
+    req.body.map((e) => SalesService.putSale(saleId, e.productId, e.quantity))
+  );
+  
+  const putsSales = { saleId, itemUpdated: mapPutsSales };
+  
+  res.status(OK).json(putsSales);
+});
+
 module.exports = route;
