@@ -31,10 +31,10 @@ const MSG_SALE = {
 };
 
 const MIN_LENGTH_NAME = 5;
-const MIN_QUANTITY = 0;
+const MIN_QUANTITY = 1;
 
 const blank = (value) => (!value);
-const lengthLessThan = (value, min) => (value.length < min);
+const lengthLessThan = (value, min) => (value < min);
 
 module.exports = {
   serializeAllSales,

@@ -12,8 +12,8 @@ app.get('/', (_request, response) => {
 app.use('/products', routes.ProductController);
 app.use('/sales', routes.SalesController);
 
-app.all('*', (err, _req, res, _next) => {
-  res.status(err.code || 500).json({ message: err.message || 'Server internal error' });
+app.use((err, _req, res, _next) => {
+  return res.status(err.status || 500).json({ message: err.message });
 });
 
 // não remova essa exportação, é para o avaliador funcionar

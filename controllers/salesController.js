@@ -1,8 +1,8 @@
 const route = require('express').Router();
 const { map } = require('modern-async');
-// import { map } from 'modern-async'
+const rescue = require('express-rescue');
+const { middlewareSalesValidation } = require('../middlewares/salesMiddleware');
 
-// const rescue = require('express-rescue');
 const SalesService = require('../services/salesService');
 const { STATUS, MSG_SALE } = require('../utils');
 const { OK, CREATED, NOT_FOUND } = STATUS;
@@ -19,16 +19,18 @@ route.get('/:id', async(req, res) => {
   res.status(OK).json(findsale);
 });
 
-route.post('/', async(req, res) => {
+route.post('/', middlewareSalesValidation, rescue(async(req, res) => {
   const idSale = await SalesService.registerSale();
   const mapSales = await map(
     req.body, async (e) => SalesService.postSale(idSale, e.productId, e.quantity)
   );
-  const postsSales = { id: idSale, itemsSold: mapSales }
-  res.status(CREATED).json(postsSales);
-});
 
-route.put('/:id', async(req, res) => {
+  const postsSales = { id: idSale, itemsSold: mapSales };
+
+  res.status(CREATED).json(postsSales);
+}));
+
+route.put('/:id', middlewareSalesValidation, rescue(async(req, res) => {
   const { id } = req.params;
   const saleId = Number(id);
   const mapPutsSales = await Promise.all(
@@ -38,6 +40,6 @@ route.put('/:id', async(req, res) => {
   const putsSales = { saleId, itemUpdated: mapPutsSales };
   
   res.status(OK).json(putsSales);
-});
+}));
 
 module.exports = route;

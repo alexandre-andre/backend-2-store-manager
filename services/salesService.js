@@ -1,4 +1,6 @@
 const SalesModel = require('../models/salesModel');
+// const { middlewareSalesValidation } = require('../middlewares/salesMiddleware');
+// const { salesValidation } = require('../validations/salesValidation');
 
 const getAllsales =  async () => {
   const response = await SalesModel.getAllSales();
@@ -16,8 +18,12 @@ const registerSale = async () => {
 };
 
 const postSale = async (saleId, productId, quantity) => {
+  // const validations = salesValidation(productId, quantity);
+  // if (validations.message) return validations;
+
   await SalesModel.updateStockAfterSale(productId, quantity);
   const response = await SalesModel.postSale(saleId, productId, quantity);
+  
   return response;
 };
 
