@@ -9,6 +9,8 @@ const getAllsales =  async () => {
 
 const getSaleById = async (id) => {
   const response = await SalesModel.getSalesById(id);
+  if (!response) return null;
+
   return response;
 };
 
@@ -39,10 +41,16 @@ const putSale = async (saleId, productId, quantity) => {
   return response;
 };
 
+const deleteFromSaleProductsById = async (id) => {
+  await SalesModel.deleteFromSaleProductsById(id);
+  return null;
+};
+
 module.exports = {
   getAllsales,
   getSaleById,
   registerSale,
   postSale,
   putSale,
+  deleteFromSaleProductsById,
 };

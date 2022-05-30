@@ -21,9 +21,6 @@ const getSalesById = async (id) => {
       WHERE id = ?
     `, [id]
   );
-  
-  if (!sale) return null;
-
   return serializeById(sale);
 };
 
@@ -54,6 +51,10 @@ const putSale = async (saleId, productId, quantity) => {
   return { productId, quantity };
 };
 
+const deleteFromSaleProductsById = async (id) => {
+  await connection.execute('DELETE FROM sales WHERE id = ?;',[id]);
+};
+
 module.exports = {
   getAllSales,
   getSalesById,
@@ -62,4 +63,5 @@ module.exports = {
   putSale,
   updateStockAfterSale,
   updateStockAfterSaleReintegration,
+  deleteFromSaleProductsById,
 };

@@ -5,7 +5,7 @@ const { middlewareSalesValidation } = require('../middlewares/salesMiddleware');
 
 const SalesService = require('../services/salesService');
 const { STATUS, MSG_SALE } = require('../utils');
-const { OK, CREATED, NOT_FOUND } = STATUS;
+const { OK, CREATED, NO_CONTENT, NOT_FOUND } = STATUS;
 
 route.get('/', async(_req, res) => {
   const allsales = await SalesService.getAllsales();
@@ -41,5 +41,16 @@ route.put('/:id', middlewareSalesValidation, rescue(async(req, res) => {
   
   res.status(OK).json(putsSales);
 }));
+
+route.delete('/:id', async(req, res) => {
+  const { id } = req.params;
+  const saleId = await SalesService.getSaleById(id);
+
+  if (!saleId.length) return res.status(NOT_FOUND).json({ message: MSG_SALE.NOT_FOUND });
+  
+  await SalesService.deleteFromSaleProductsById(id);
+
+  res.status(NO_CONTENT).end();
+});
 
 module.exports = route;
