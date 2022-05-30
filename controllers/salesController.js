@@ -48,7 +48,7 @@ route.delete('/:id', async(req, res) => {
 
   if (!saleId.length) return res.status(NOT_FOUND).json({ message: MSG_SALE.NOT_FOUND });
   
-  await SalesService.deleteFromSaleProductsById(id);
+  await SalesService.deleteSaleFromSales(id);
 
   res.status(NO_CONTENT).end();
 });

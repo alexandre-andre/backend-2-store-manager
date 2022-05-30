@@ -41,8 +41,15 @@ const putSale = async (saleId, productId, quantity) => {
   return response;
 };
 
-const deleteFromSaleProductsById = async (id) => {
-  await SalesModel.deleteFromSaleProductsById(id);
+const deleteSaleFromSales = async (id) => {
+  const sales = await SalesModel.getSalesById(id);
+
+  await sales.map((e) => SalesModel.updateStockAfterSaleReintegration(e.productId, e.quantity));
+
+  await SalesModel.deleteSaleFromSales(id);
+
+  await SalesModel.deleteSaleFromSalesProducts(id);
+  
   return null;
 };
 
@@ -52,5 +59,5 @@ module.exports = {
   registerSale,
   postSale,
   putSale,
-  deleteFromSaleProductsById,
+  deleteSaleFromSales,
 };

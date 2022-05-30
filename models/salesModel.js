@@ -51,8 +51,12 @@ const putSale = async (saleId, productId, quantity) => {
   return { productId, quantity };
 };
 
-const deleteFromSaleProductsById = async (id) => {
+const deleteSaleFromSales = async (id) => {
   await connection.execute('DELETE FROM sales WHERE id = ?;',[id]);
+};
+
+const deleteSaleFromSalesProducts = async(id) => {
+  await connection.execute('DELETE FROM sales_products WHERE sale_id = ?;', [id]);
 };
 
 module.exports = {
@@ -63,5 +67,6 @@ module.exports = {
   putSale,
   updateStockAfterSale,
   updateStockAfterSaleReintegration,
-  deleteFromSaleProductsById,
+  deleteSaleFromSales,
+  deleteSaleFromSalesProducts,
 };
