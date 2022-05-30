@@ -8,7 +8,8 @@ const getAllSales = async () => {
       FROM sales_products AS sp
       INNER JOIN sales As sales
       ON sp.sale_id = sales.id;
-    `);
+    `,
+  );
   return serializeAllSales(sales);
 };
 
@@ -19,18 +20,18 @@ const getSalesById = async (id) => {
       INNER JOIN sales As sales
       ON sp.sale_id = sales.id
       WHERE id = ?
-    `, [id]
+    `, [id],
   );
   return serializeById(sale);
 };
 
 const updateStockAfterSale = async (id, quantity) => {
-  const query = `UPDATE products SET quantity = quantity - ? WHERE id = ?;`;
+  const query = 'UPDATE products SET quantity = quantity - ? WHERE id = ?;';
   await connection.execute(query, [quantity, id]);
 };
 
 const updateStockAfterSaleReintegration = async (id, quantity) => {
-  const query = `UPDATE products SET quantity = quantity + ? WHERE id = ?;`;
+  const query = 'UPDATE products SET quantity = quantity + ? WHERE id = ?;';
   await connection.execute(query, [quantity, id]);
 };
 
@@ -40,22 +41,22 @@ const registerSale = async () => {
 };
 
 const postSale = async (saleId, productId, quantity) => {
-  const query = `INSERT INTO sales_products(sale_id, product_id, quantity) VALUES(?, ?, ?);`;
+  const query = 'INSERT INTO sales_products(sale_id, product_id, quantity) VALUES(?, ?, ?);';
   await connection.execute(query, [saleId, productId, quantity]);
   return { productId, quantity };
 };
 
 const putSale = async (saleId, productId, quantity) => {
-  const query = `UPDATE sales_products SET quantity = ? WHERE sale_id = ? AND product_id = ?;`;
-  await connection.execute(query, [quantity,  saleId, productId]);
+  const query = 'UPDATE sales_products SET quantity = ? WHERE sale_id = ? AND product_id = ?;';
+  await connection.execute(query, [quantity, saleId, productId]);
   return { productId, quantity };
 };
 
 const deleteSaleFromSales = async (id) => {
-  await connection.execute('DELETE FROM sales WHERE id = ?;',[id]);
+  await connection.execute('DELETE FROM sales WHERE id = ?;', [id]);
 };
 
-const deleteSaleFromSalesProducts = async(id) => {
+const deleteSaleFromSalesProducts = async (id) => {
   await connection.execute('DELETE FROM sales_products WHERE sale_id = ?;', [id]);
 };
 

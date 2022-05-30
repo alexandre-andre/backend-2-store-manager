@@ -3,7 +3,7 @@ const ProductsModel = require('../models/productsModel');
 // const { middlewareSalesValidation } = require('../middlewares/salesMiddleware');
 // const { salesValidation } = require('../validations/salesValidation');
 
-const getAllsales =  async () => {
+const getAllsales = async () => {
   const response = await SalesModel.getAllSales();
   return response;
 };
@@ -25,7 +25,7 @@ const postSale = async (saleId, productId, quantity) => {
   
   if (quantity > product.quantity) {
     return { status: 422, message: 'Such amount is not permitted to sell' };
-  };  
+  }
 
   await SalesModel.updateStockAfterSale(productId, quantity);
   
@@ -36,8 +36,8 @@ const postSale = async (saleId, productId, quantity) => {
 
 const putSale = async (saleId, productId, quantity) => {
   const sales = await SalesModel.getSalesById(saleId);
-  const e = sales.find(e => e.productId === productId);
-  const quantityToReintegrate = e.quantity - quantity; 
+  const findSale = sales.find((e) => e.productId === productId);
+  const quantityToReintegrate = findSale.quantity - quantity;
 
   await SalesModel.updateStockAfterSaleReintegration(saleId, quantityToReintegrate);
 

@@ -2,7 +2,7 @@ const serializeAllSales = (array) => array.map((e) => ({
   saleId: e.sale_id,
   date: e.date,
   productId: e.product_id,
-  quantity: e.quantity
+  quantity: e.quantity,
 }));
 
 const serializeById = (array) => array.map((e) => ({
@@ -18,12 +18,12 @@ const STATUS = {
   BAD_REQUEST: 400,
   NOT_FOUND: 404,
   CONFLICT: 409,
-  UNPROCESSABLE_ENTITY: 422
+  UNPROCESSABLE_ENTITY: 422,
 };
 
 const MSG_PRODUCT = {
   NOT_FOUND: 'Product not found',
-  ALREADY_EXISTS: 'Product already exists'
+  ALREADY_EXISTS: 'Product already exists',
 };
 
 const MSG_SALE = {
@@ -45,5 +45,5 @@ module.exports = {
   MIN_LENGTH_NAME,
   MIN_QUANTITY,
   blank,
-  lengthLessThan
-}
+  lengthLessThan,
+};

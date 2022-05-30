@@ -2,44 +2,44 @@ const route = require('express').Router();
 const { map } = require('modern-async');
 const rescue = require('express-rescue');
 const { middlewareSalesValidation } = require('../middlewares/salesMiddleware');
-
 const SalesService = require('../services/salesService');
 const { STATUS, MSG_SALE } = require('../utils');
+
 const { OK, CREATED, NO_CONTENT, NOT_FOUND } = STATUS;
 
-route.get('/', async(_req, res) => {
+route.get('/', async (_req, res) => {
   const allsales = await SalesService.getAllsales();
   res.status(OK).json(allsales);
 });
 
-route.get('/:id', async(req, res) => {
+route.get('/:id', async (req, res) => {
   const { id } = req.params;
   const findsale = await SalesService.getSaleById(id);
   if (!findsale.length) return res.status(NOT_FOUND).json({ message: MSG_SALE.NOT_FOUND });
   res.status(OK).json(findsale);
 });
 
-route.post('/', middlewareSalesValidation, rescue(async(req, res) => {
+route.post('/', middlewareSalesValidation, rescue(async (req, res) => {
   const idSale = await SalesService.registerSale();
   const mapSales = await map(
-    req.body, async (e) => SalesService.postSale(idSale, e.productId, e.quantity)
+    req.body, async (e) => SalesService.postSale(idSale, e.productId, e.quantity),
   );
 
-  if (mapSales.find(e => e.status)) {
+  if (mapSales.find((e) => e.status)) {
     const [{ status, message }] = mapSales;
     return res.status(status).json({ message });
-  };
+  }
 
   const postsSales = { id: idSale, itemsSold: mapSales };
 
   res.status(CREATED).json(postsSales);
 }));
 
-route.put('/:id', middlewareSalesValidation, rescue(async(req, res) => {
+route.put('/:id', middlewareSalesValidation, rescue(async (req, res) => {
   const { id } = req.params;
   const saleId = Number(id);
   const mapPutsSales = await Promise.all(
-    req.body.map((e) => SalesService.putSale(saleId, e.productId, e.quantity))
+    req.body.map((e) => SalesService.putSale(saleId, e.productId, e.quantity)),
   );
   
   const putsSales = { saleId, itemUpdated: mapPutsSales };
@@ -47,7 +47,7 @@ route.put('/:id', middlewareSalesValidation, rescue(async(req, res) => {
   res.status(OK).json(putsSales);
 }));
 
-route.delete('/:id', async(req, res) => {
+route.delete('/:id', async (req, res) => {
   const { id } = req.params;
   const saleId = await SalesService.getSaleById(id);
 

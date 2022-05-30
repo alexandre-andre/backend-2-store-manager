@@ -3,6 +3,5 @@ const SalesController = require('../controllers/salesController');
 
 module.exports = {
   ProductController,
-  SalesController
+  SalesController,
 };
-
