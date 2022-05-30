@@ -25,6 +25,11 @@ route.post('/', middlewareSalesValidation, rescue(async(req, res) => {
     req.body, async (e) => SalesService.postSale(idSale, e.productId, e.quantity)
   );
 
+  if (mapSales.find(e => e.status)) {
+    const [{ status, message }] = mapSales;
+    return res.status(status).json({ message });
+  };
+
   const postsSales = { id: idSale, itemsSold: mapSales };
 
   res.status(CREATED).json(postsSales);

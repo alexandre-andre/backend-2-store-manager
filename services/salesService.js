@@ -1,4 +1,5 @@
 const SalesModel = require('../models/salesModel');
+const ProductsModel = require('../models/productsModel');
 // const { middlewareSalesValidation } = require('../middlewares/salesMiddleware');
 // const { salesValidation } = require('../validations/salesValidation');
 
@@ -20,12 +21,16 @@ const registerSale = async () => {
 };
 
 const postSale = async (saleId, productId, quantity) => {
-  // const validations = salesValidation(productId, quantity);
-  // if (validations.message) return validations;
+  const product = await ProductsModel.getProductById(productId);
+  
+  if (quantity > product.quantity) {
+    return { status: 422, message: 'Such amount is not permitted to sell' };
+  };  
 
   await SalesModel.updateStockAfterSale(productId, quantity);
-  const response = await SalesModel.postSale(saleId, productId, quantity);
   
+  const response = await SalesModel.postSale(saleId, productId, quantity);
+
   return response;
 };
 
