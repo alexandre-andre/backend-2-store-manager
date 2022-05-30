@@ -1,13 +1,12 @@
 const { salesValidation } = require('../validations/salesValidation')
 
 const middlewareSalesValidation = (req, res, next) => {
-  const body = req.body || {};
-  const { code, message } = salesValidation(body);
+  const validations = salesValidation(req.body);
 
-  console.log('MIDDLEWARE', code, message);
-  
-  if (code !== 200) return res.status(code).json({ message });
-  
+  if (validations) {
+    return res.status(validations.status).json({ message: validations.message });
+  };
+
   next();
 };
 

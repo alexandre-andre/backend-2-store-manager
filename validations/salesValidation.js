@@ -12,17 +12,15 @@ const salesValidation = (body) => {
 
   body.forEach(({ productId, quantity }) => {
     if (blank(productId)) {
-      result = { code: BAD_REQUEST, message: MSG_SALE.BLANK_ID }; 
+      result = { status: BAD_REQUEST, message: MSG_SALE.BLANK_ID }; 
     };
 
-    if (blank(quantity)) result = { code: BAD_REQUEST, message: MSG_SALE.BLANK_QUANTITY };
+    if (blank(quantity)) result = { status: BAD_REQUEST, message: MSG_SALE.BLANK_QUANTITY };
 
     if (lengthLessThan(quantity, MIN_QUANTITY)) {
-      result = { code: UNPROCESSABLE_ENTITY, message: MSG_SALE.INVALID_QUANTITY };
+      result = { status: UNPROCESSABLE_ENTITY, message: MSG_SALE.INVALID_QUANTITY };
     };
   });
-
-  console.log(result);
   
   return result;
 };
