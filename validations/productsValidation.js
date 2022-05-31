@@ -15,11 +15,11 @@ const productsValidation = (res, name, quantity) => {
   if (lengthLessThan(name.length, MIN_LENGTH_NAME)) {
     return res.status(UNPROCESSABLE_ENTITY).json({ message: MSG_PROD.INVALID_LENGTH_NAME });
   }
-
+  
   if (lengthLessThan(quantity, MIN_QUANTITY)) { 
     return res.status(UNPROCESSABLE_ENTITY).json({ message: MSG_PROD.INVALID_LENGTH_QUANTITY });
   }
-
+  
   if (blank(quantity)) return res.status(BAD_REQUEST).json({ message: MSG_PROD.BLANK_QTT });
   
   return {};

@@ -1,33 +1,81 @@
-const fs = require('fs');
+const ProductsModel = require('../models/productsModel');
+const ProductsService = require('../services/productService');
+const ProductsController = require('../controllers/productController');
+const SalesModel = require('../models/salesModel');
+const SalesService = require('../services/salesService');
+const SalesController = require('../controllers/salesController');
+
 const sinon = require('sinon');
 const { expect } = require('chai');
 
-// const frisby = require("frisby");
-// const mysql = require("mysql2/promise");
-const restoreDb = require("./restoreDb");
-require("dotenv").config();
 
-describe('01 - Escreva testes para cobrir 35% das camadas da sua aplicação', () => {
-  const url = `http://localhost:${process.env.PORT}`;
-  let connection;
+describe('Cobertura de testes da aplicação', () => {
+  const mockProducts =   [
+    {
+      id: 1,
+      name: 'Martelo de Thor',
+      quantity: 10
+    },
+    {
+      id: 2,
+      name: 'Traje de encolhimento',
+      quantity: 20
+    },
+    {
+      id: 3,
+      name: 'Escudo do Capitão América',
+      quantity: 30
+    }
+  ];
 
-  beforeAll(async() => {
-    const {
-      MYSQL_USER,
-      MYSQL_PASSWORD,
-      MYSQL_HOST
-    } = process.env;
+  const mockSales = [
+    {
+      id: 1,
+      date: 31/05/2022, 
+    },
+    {
+      id: 2,
+      date: 31/05/2022,
+    }
+  ];
 
-    connection = mysql.createPool({
-      host: MYSQL_HOST,
-      user: MYSQL_USER,
-      password: MYSQL_PASSWORD,
-    }); 
+  const mosckSalesProducts = [
+    {
+      id: 1,
+      product_id: 1,
+      quantity: 5,
+    },
+    {
+      id: 1,
+      product_id: 2,
+      quantity: 10,
+    },
+    {
+      id: 2,
+      product_id: 3,
+      quantity: 15,
+    }
+  ];
+  // let connection;
+
+  // beforeEach(async() => {
+  // });
+
+  // afterEach(async () => {
+  //   restore();
+  // });
+
+  describe('Testa Camada Model', () => {
+    it('deve retornar um array não vazio', async () =>{
+      const [response] = await ProductsModel.getAllProducts();
+      expect(response).to.be.an('array');
+      expect(response).not.to.be.empty;
+    });
+
+    // it()
   });
 
-  afterAll(async () => {
-    await connection.execute("DROP DATABASE StoreManager")
-    await connection.end();
-  });
-  
+  // describe('Testa Camada Service', () => {});
+
+  // describe('Testa Camada Controller', () => {});
 });
