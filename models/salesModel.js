@@ -36,18 +36,24 @@ const updateStockAfterSaleReintegration = async (id, quantity) => {
 };
 
 const registerSale = async () => {
-  const [{ insertId }] = await connection.execute('INSERT INTO StoreManager.sales(date) VALUES(now())');
+  const [{ insertId }] = await connection.execute(
+    'INSERT INTO StoreManager.sales(date) VALUES(now())',
+  );
   return insertId;
 };
 
 const postSale = async (saleId, productId, quantity) => {
-  const query = 'INSERT INTO StoreManager.sales_products(sale_id, product_id, quantity) VALUES(?, ?, ?);';
+  const query = `
+    INSERT INTO StoreManager.sales_products(sale_id, product_id, quantity) VALUES(?, ?, ?);
+  `;
   await connection.execute(query, [saleId, productId, quantity]);
   return { productId, quantity };
 };
 
 const putSale = async (saleId, productId, quantity) => {
-  const query = 'UPDATE StoreManager.sales_products SET quantity = ? WHERE sale_id = ? AND product_id = ?;';
+  const query = `
+    UPDATE StoreManager.sales_products SET quantity = ? WHERE sale_id = ? AND product_id = ?;
+  `;
   await connection.execute(query, [quantity, saleId, productId]);
   return { productId, quantity };
 };
