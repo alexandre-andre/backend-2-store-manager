@@ -47,24 +47,28 @@ const mockSalesProducts = [
 
 const mockSalesProductsSerialized = [
   {
-    id: 1,
+    saleId: 1,
+    date: '2022-06-01T15:30:24.000Z',
     productId: 1,
-    quantity: 5,
+    quantity: 5
   },
   {
-    id: 1,
+    saleId: 1,
+    date: '2022-06-01T15:30:24.000Z',
     productId: 2,
-    quantity: 10,
+    quantity: 10
   },
   {
-    id: 2,
+    saleId: 2,
+    date: '2022-06-01T15:30:24.000Z',
     productId: 3,
-    quantity: 15,
+    quantity: 15
   }
 ];
 
 module.exports = {
   mockProducts,
   mockSales,
-  mockSalesProducts, 
+  mockSalesProducts,
+  mockSalesProductsSerialized, 
 };
