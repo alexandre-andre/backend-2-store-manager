@@ -1,23 +1,26 @@
 const SalesModel = require('../models/salesModel');
 const ProductsModel = require('../models/productsModel');
+const { serializeAllSales, serializeById } = require('../utils');
 // const { middlewareSalesValidation } = require('../middlewares/salesMiddleware');
 // const { salesValidation } = require('../validations/salesValidation');
 
 const getAllsales = async () => {
-  const response = await SalesModel.getAllSales();
-  return response;
+  const [sales] = await SalesModel.getAllSales();
+  return serializeAllSales(sales);
 };
 
 const getSaleById = async (id) => {
-  const response = await SalesModel.getSalesById(id);
-  if (!response) return null;
+  const [sales] = await SalesModel.getSaleById(id);
 
-  return response;
+  if (!sales) return null;
+
+  return serializeById(sales);
 };
 
 const registerSale = async () => {
-  const idSale = await SalesModel.registerSale();
-  return idSale;
+  const [{ insertId }] = await SalesModel.registerSale();
+
+  return insertId;
 };
 
 const postSale = async (saleId, productId, quantity) => {
@@ -27,29 +30,31 @@ const postSale = async (saleId, productId, quantity) => {
     return { status: 422, message: 'Such amount is not permitted to sell' };
   }
 
-  await SalesModel.updateStockAfterSale(productId, quantity);
+  await SalesModel.updateStockDown(productId, quantity);
   
-  const response = await SalesModel.postSale(saleId, productId, quantity);
+  await SalesModel.postSale(saleId, productId, quantity);
 
-  return response;
+  return { productId, quantity };
 };
 
 const putSale = async (saleId, productId, quantity) => {
-  const sales = await SalesModel.getSalesById(saleId);
+  const sales = await getSaleById(saleId);
+  
   const findSale = sales.find((e) => e.productId === productId);
+  
   const quantityToReintegrate = findSale.quantity - quantity;
 
-  await SalesModel.updateStockAfterSaleReintegration(saleId, quantityToReintegrate);
+  await SalesModel.updateStockUp(saleId, quantityToReintegrate);
 
-  const response = await SalesModel.putSale(saleId, productId, quantity);
+  await SalesModel.putSale(saleId, productId, quantity);
 
-  return response;
+  return { productId, quantity };
 };
 
 const deleteSaleFromSales = async (id) => {
-  const sales = await SalesModel.getSalesById(id);
+  const sales = await getSaleById(id);
 
-  await sales.map((e) => SalesModel.updateStockAfterSaleReintegration(e.productId, e.quantity));
+  await sales.map((e) => SalesModel.updateStockUp(e.productId, e.quantity));
 
   await SalesModel.deleteSaleFromSales(id);
 

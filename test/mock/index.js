@@ -16,14 +16,16 @@ const mockProducts =   [
   }
 ];
 
+const currentDate = new Date().toISOString().slice(0, 10).replace(/-/g, '/');
+
 const mockSales = [
   {
     id: 1,
-    date: 31/05/2022, 
+    date: currentDate, 
   },
   {
     id: 2,
-    date: 31/05/2022,
+    date: currentDate,
   }
 ];
 
@@ -45,23 +47,23 @@ const mockSalesProducts = [
   }
 ];
 
-const mockSalesProductsSerialized = [
+const mockAllSales = [
   {
-    saleId: 1,
+    sale_id: 1,
     date: '2022-06-01T15:30:24.000Z',
-    productId: 1,
+    product_id: 1,
     quantity: 5
   },
   {
-    saleId: 1,
+    sale_id: 1,
     date: '2022-06-01T15:30:24.000Z',
-    productId: 2,
+    product_id: 2,
     quantity: 10
   },
   {
-    saleId: 2,
+    sale_id: 2,
     date: '2022-06-01T15:30:24.000Z',
-    productId: 3,
+    product_id: 3,
     quantity: 15
   }
 ];
@@ -70,5 +72,5 @@ module.exports = {
   mockProducts,
   mockSales,
   mockSalesProducts,
-  mockSalesProductsSerialized, 
+  mockAllSales, 
 };

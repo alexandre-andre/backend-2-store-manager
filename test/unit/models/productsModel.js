@@ -1,48 +1,68 @@
 const sinon = require('sinon');
 const chai = require('chai');
 const { expect, should } = chai;
-const chaiHttp = require('chai-http');
+// const chaiHttp = require('chai-http');
 
 const ProductsModel = require('../../../models/productsModel');
 const { connection } = require('../../../models/connection')
 const { mockProducts } = require('../../mock');
+const req = require('express/lib/request');
 
 // const url = 'http://localhost:3000';
 
 // chai.use(chaiHttp)
+const name = 'smeagol';
+const quantity = 50;
 
-describe('My tests on MODELS', () => {
-  
-  describe('testing GET /products', () => {
-    beforeEach(() => {
-      sinon.stub(connection, 'execute').resolves([mockProducts]);
-    });
+describe('TESTA productsModel', () => {
+  beforeEach(() => {
+    sinon.stub(connection, 'execute').resolves([mockProducts]);
+  });
 
-    afterEach(() => {
-      connection.execute.restore();
-    });
+  afterEach(() => {
+    connection.execute.restore();
+  });
 
-    it('Get all products in array', async () => {
-      const products = await ProductsModel.getAllProducts();
+  it('Testa getAllProducts', async () => {
+    const products = await ProductsModel.getAllProducts();
 
-      expect(products).to.be.an('array');
-      expect(products).to.length(3);
-    });
+    expect(products).to.be.an('array');
+    expect(products).to.length(3);
+  });
 
-    it('Get one product by id and verify yours keys', async () => {
-      const products = await ProductsModel.getProductById(1);
+  it('Testa getProductById', async () => {
+    const products = await ProductsModel.getProductById(1);
 
-      expect(products).to.be.an('object');
-      expect(products).to.have.property('id');
-      expect(products).to.have.property('name');
-      expect(products).to.have.property('quantity');
-    });
+    expect(products).to.be.an('object');
+    expect(products).to.have.property('id');
+    expect(products).to.have.property('name');
+    expect(products).to.have.property('quantity');
+  });
 
-    // it('Return an empty array when a product id not exists', async () => {
-    //   const products = await ProductsModel.getProductById(999);
-    //   // expect(products).to.have.length(0);
-    //   expect(products).to.be.equal({});
-    // });
+  it('Testa getProductByName', async () => {
+    const martelo = await ProductsModel.getProductByName('Martelo');
 
+    expect(martelo).to.be.an('object');
+    expect(martelo).to.deep.equal(mockProducts[0]);
+  });
+
+  // it('Testa postProductdByName', async () => {
+  //   const smeagol = await ProductsModel.postProductdByName(name, quantity);
+
+  //   console.log('>>>>>>', smeagol);
+  //   expect(smeagol).to.be.an('object');
+  //   expect(smeagol).to.deep.equal({ id: 4, name, quantity });
+  // });
+
+  // it('Testa putProduct', async () => {
+  //   const [put] = await ProductsModel.putProduct(1, 'smeagol', quantity);
+  //   console.log('PUT: ', put);
+  //   expect(biscoito).to.deep.equal({ id: 1, name, quantity });
+  // });
+
+  it('Testa deleteProductById', async () => {
+    const produto = await ProductsModel.deleteProductById(1);
+
+    expect(produto).to.be.null;
   });
 });
