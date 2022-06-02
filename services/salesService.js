@@ -5,8 +5,8 @@ const { serializeAllSales, serializeById } = require('../utils');
 // const { salesValidation } = require('../validations/salesValidation');
 
 const getAllsales = async () => {
-  const [sales] = await SalesModel.getAllSales();
-  return serializeAllSales(sales);
+  const sales = await SalesModel.getAllSales();
+  return sales;
 };
 
 const getSaleById = async (id) => {

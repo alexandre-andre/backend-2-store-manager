@@ -4,12 +4,13 @@ const rescue = require('express-rescue');
 const { middlewareSalesValidation } = require('../middlewares/salesMiddleware');
 const SalesService = require('../services/salesService');
 const { STATUS, MSG_SALE } = require('../utils');
+const { serializeAllSales, serializeById } = require('../utils');
 
 const { OK, CREATED, NO_CONTENT, NOT_FOUND } = STATUS;
 
 route.get('/', async (_req, res) => {
-  const allsales = await SalesService.getAllsales();
-  res.status(OK).json(allsales);
+  const [allsales] = await SalesService.getAllsales();
+  res.status(OK).json(serializeAllSales(allsales));
 });
 
 route.get('/:id', async (req, res) => {

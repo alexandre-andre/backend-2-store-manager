@@ -6,65 +6,87 @@ const { expect } = chai;
 const SalesModel = require('../../../models/salesModel');
 const ProducsModel = require('../../../models/productsModel');
 const { connection } = require('../../../models/connection')
-const { mockSales, mockAllSales } = require('../../mock');
+const { mockSales, mockAllSales, mockSalesProducts } = require('../../mock');
 
 // const url = 'http://localhost:3000';
 
 // chai.use(chaiHttp)
 
-describe('salesModel', () => {
-  describe('get')
-  beforeEach(() => {
-    sinon.stub(connection, 'execute').resolves(mockAllSales);
+describe('MODELS SALES', () => {
+  describe('Verifica getAllSales e getSalesById', () => {
+    beforeEach(() => {
+      sinon.stub(connection, 'execute').resolves(mockAllSales);
+    });
+  
+    afterEach(() => {
+      connection.execute.restore();
+    });
+  
+    it('Verifica getAllSales', async () => {
+      const sales = await SalesModel.getAllSales();
+
+      expect(sales).to.be.an('array');
+      expect(sales).to.have.length(3);
+      expect(sales[0]).to.have.property('sale_id');
+      expect(sales[0]).to.have.property('date');
+      expect(sales[0]).to.have.property('product_id');
+      expect(sales[0]).to.have.property('quantity');
+    });
+
+    it('Verifica getSaleById', async () => {
+      const sales = await SalesModel.getSaleById(1);
+      const pa = sales.filter(e => e.sale_id === 2);
+
+      expect(sales).to.be.an('array');
+      expect(sales[0]).to.have.property('sale_id');
+      expect(sales[0]).to.have.property('date');
+      expect(sales[0]).to.have.property('product_id');
+      expect(pa).to.deep.equal([
+        {
+          "sale_id": 2,
+          "date": "2022-06-01T15:30:24.000Z",
+          "product_id": 3,
+          "quantity": 15
+        }
+      ]);
+    });
   });
 
-  afterEach(() => {
-    connection.execute.restore();
+  describe('registerSale', () => {
+    beforeEach(() => {
+      sinon.stub(connection, 'execute').resolves(mockSales[0]);
+    });
+  
+    afterEach(() => {
+      connection.execute.restore();
+    });
+
+    it('Testa registerSale', async () => {
+      const newSale = await SalesModel.registerSale();
+      
+      expect(newSale).to.be.an('object');
+      expect(newSale).to.have.property('id')
+    });
   });
 
-  it('Testa getAllSales', async () => {
-    const sales = await SalesModel.getAllSales();
+  describe('registerSale', () => {
+    beforeEach(() => {
+      sinon.stub(connection, 'execute').resolves(mockSalesProducts[0]);
+    });
+  
+    afterEach(() => {
+      connection.execute.restore();
+    });
 
-    expect(sales).to.be.an('array');
-    expect(sales).to.have.length(3);
-    expect(sales[0]).to.have.property('sale_id');
-    expect(sales[0]).to.have.property('date');
-    expect(sales[0]).to.have.property('product_id');
-    expect(sales[0]).to.have.property('quantity');
+    it('Testa postSale', async () => {
+      const newSale = await SalesModel.postSale(1, 1, 5);
+      // console.log('newSale: ', newSale);
+      expect(newSale).to.be.an('object');
+      expect(newSale).to.have.property('product_id');
+      expect(newSale).to.have.property('quantity');
+      expect(newSale).to.deep.equal({ sale_id: 1, product_id: 1, quantity: 5 });
+    });
   });
-
-  it('Testa getSalesById', async () => {
-    const sales = await SalesModel.getSaleById(1);
-    const pa = sales.filter(e => e.sale_id === 2);
-
-    expect(sales).to.be.an('array');
-    expect(sales[0]).to.have.property('sale_id');
-    expect(sales[0]).to.have.property('date');
-    expect(sales[0]).to.have.property('product_id');
-    expect(pa).to.deep.equal([
-      {
-        "sale_id": 2,
-        "date": "2022-06-01T15:30:24.000Z",
-        "product_id": 3,
-        "quantity": 15
-      }
-    ]);
-  });
-
-  // it('Testa registerSale', async () => {
-  //   const newSale = await SalesModel.registerSale();
-  //   // console.log(newSale);
-  //   expect(newSale).to.equal(3);
-  // });
-
-  // it('Testa postSale', async () => {
-  //   const newSale = await SalesModel.postSale(1, 1, 50);
-  //   // console.log('newSale: ', newSale);
-  //   expect(newSale).to.be.an('object');
-  //   expect(newSale).to.have.property('product_id');
-  //   expect(newSale).to.have.property('quantity');
-  //   expect(newSale).to.deep.equal({ product_id: 1, quantity: 50 });
-  // });
 
   // it('Testa putSale', async () => {
   //   const put = await SalesModel.putSale(1, 1, 500);

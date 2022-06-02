@@ -14,36 +14,50 @@ const req = require('express/lib/request');
 const name = 'smeagol';
 const quantity = 50;
 
-describe('TESTA productsModel', () => {
-  beforeEach(() => {
-    sinon.stub(connection, 'execute').resolves([mockProducts]);
+describe('MODELS PROUCTS', () => {
+  describe('verifica getAllProducts', () => {
+    beforeEach(() => {
+      sinon.stub(connection, 'execute').resolves(mockProducts);
+      console.log(mockProducts);
+    });
+    
+    afterEach(() => {
+      connection.execute.restore();
+    });
+    
+    it('Testa getAllProducts', async () => {
+      const products = await ProductsModel.getAllProducts();
+      
+      expect(products).to.be.an('array');
+      expect(products).to.length(3);
+    });
   });
 
-  afterEach(() => {
-    connection.execute.restore();
-  });
+  describe('verifica getProductById', () => {
+    beforeEach(() => {
+      sinon.stub(connection, 'execute').resolves([mockProducts]);
+      console.log([mockProducts]);
+    });
+  
+    afterEach(() => {
+      connection.execute.restore();
+    });
 
-  it('Testa getAllProducts', async () => {
-    const products = await ProductsModel.getAllProducts();
+    it('Testa getProductById', async () => {
+      const products = await ProductsModel.getProductById(1);
+      
+      expect(products).to.be.an('object');
+      expect(products).to.have.property('id');
+      expect(products).to.have.property('name');
+      expect(products).to.have.property('quantity');
+    });
 
-    expect(products).to.be.an('array');
-    expect(products).to.length(3);
-  });
+    it('Testa getProductByName', async () => {
+      const martelo = await ProductsModel.getProductByName('Martelo');
 
-  it('Testa getProductById', async () => {
-    const products = await ProductsModel.getProductById(1);
-
-    expect(products).to.be.an('object');
-    expect(products).to.have.property('id');
-    expect(products).to.have.property('name');
-    expect(products).to.have.property('quantity');
-  });
-
-  it('Testa getProductByName', async () => {
-    const martelo = await ProductsModel.getProductByName('Martelo');
-
-    expect(martelo).to.be.an('object');
-    expect(martelo).to.deep.equal(mockProducts[0]);
+      expect(martelo).to.be.an('object');
+      expect(martelo).to.deep.equal(mockProducts[0]);
+    });
   });
 
   // it('Testa postProductdByName', async () => {
@@ -60,9 +74,9 @@ describe('TESTA productsModel', () => {
   //   expect(biscoito).to.deep.equal({ id: 1, name, quantity });
   // });
 
-  it('Testa deleteProductById', async () => {
-    const produto = await ProductsModel.deleteProductById(1);
+  // it('Testa deleteProductById', async () => {
+  //   const produto = await ProductsModel.deleteProductById(1);
 
-    expect(produto).to.be.null;
-  });
+  //   expect(produto).to.be.null;
+  // });
 });

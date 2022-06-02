@@ -5,7 +5,7 @@ const { middlewareProductsValidation } = require('../middlewares/productsMiddlew
 const { STATUS, MSG_PRODUCT } = require('../utils');
 
 route.get('/', async (_req, res) => {
-  const allProducts = await ProductService.getAllProducts();
+  const [allProducts] = await ProductService.getAllProducts();
   res.status(STATUS.OK).json(allProducts);
 });
 

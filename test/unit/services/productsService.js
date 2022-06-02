@@ -3,31 +3,32 @@ const chai = require('chai');
 const { expect } = chai;
 // const chaiHttp = require('chai-http');
 
-const SalesModel = require('../../../models/salesModel');
-const SalesService = require('../../../services/salesService');
+const ProductsModel = require('../../../models/productsModel');
+const ProductsService = require('../../../services/productService');
 const { connection } = require('../../../models/connection')
-const { mockSales, mockAllSales, mockAllSalesSerialized, mockSalesProducts } = require('../../mock');
+const { mockAllProducts } = require('../../mock');
 
-describe('SERVICES SALES', () => {
-  describe('Verifica getAllsales', () => {
+describe('SERVICES PRODUCTS', () => {
+  describe('Verifica getAllProducts', () => {
     beforeEach(() => {
-      sinon.stub(SalesModel, 'getAllSales').resolves(mockAllSales);
-      // console.log('DESCRIBE: ', mockAllSales);
+      sinon.stub(ProductsModel, 'getAllProducts').resolves(mockAllProducts);
+      console.log('DESCRIBE: ', mockAllProducts);
     });
     
     afterEach(() => {
-      SalesModel.getAllSales.restore();
+      ProductsModel.getAllProducts.restore();
     });
 
-    it('retorna todas as vendas', async () => {
-      const allSales = await SalesService.getAllsales(mockAllSales);  
-      expect(allSales).to.be.an('array');
+    it('retorna todas os produtos', async () => {
+      const allProducts = await ProductsService.getAllProducts(mockAllProducts);  
+      console.log('>>>>', allProducts);
+      expect(allProducts).to.be.an('array');
     });
 
-    it('retorna todas as vendas', async () => {
-      const allSales = await SalesService.getAllsales(mockAllSales);  
-      expect(allSales).to.be.length(3);
-    });
+    // it('retorna todas os produtos', async () => {
+    //   const allSales = await SalesService.getAllsales(mockAllSales);  
+    //   expect(allSales).to.be.length(3);
+    // });
   });
 
   // describe('Verifica getSaleById', () => {
@@ -38,11 +39,11 @@ describe('SERVICES SALES', () => {
   //   }));
 
   //   beforeEach(() => {
-  //     sinon.stub(SalesModel, 'getSaleById').resolves([serializeById(mockSalesProducts)[2]]);    
+  //     sinon.stub(ProductsModel, 'getSaleById').resolves([serializeById(mockSalesProducts)[2]]);    
   //   });
     
   //   afterEach(() => {
-  //     SalesModel.getSaleById.restore();
+  //     ProductsModel.getSaleById.restore();
   //   });
 
   //   it('retorna venda pelo id', async () => {
@@ -52,16 +53,16 @@ describe('SERVICES SALES', () => {
   //   });
   // });
 
-  describe('Verifica registerSale', () => {
-    beforeEach(() => {
-      sinon.stub(SalesModel, 'registerSale').resolves([{ insertId: 1 }]);
-    });
+  // describe('Verifica registerSale', () => {
+  //   beforeEach(() => {
+  //     sinon.stub(ProductsModel, 'registerSale').resolves([{ insertId: 1 }]);
+  //   });
 
-    it('getAllsales', async () => {
-      const allSales = await SalesService.registerSale();
-      expect(allSales).to.be.equal(1);
-    });
-  });
+  //   it('getAllsales', async () => {
+  //     const allSales = await SalesService.registerSale();
+  //     expect(allSales).to.be.equal(1);
+  //   });
+  // });
 
   // describe('Verifica getAllsales', () => {
   //   it('getAllsales', async () => {
@@ -89,11 +90,11 @@ describe('SERVICES SALES', () => {
 
   // describe('Verifica deleteSaleFromSales', () => {
   //   beforeEach(() => {
-  //     sinon.stub(SalesModel, 'deleteSaleFromSales').resolves(null);
+  //     sinon.stub(ProductsModel, 'deleteSaleFromSales').resolves(null);
   //   });
 
   //   afterEach(() => {
-  //     SalesModel.deleteSaleFromSales.restore();
+  //     ProductsModel.deleteSaleFromSales.restore();
   //   });
 
   //   it('se retorna null', async () => {

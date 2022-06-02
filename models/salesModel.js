@@ -1,6 +1,6 @@
 // Renomeie esse arquivo
 const { connection } = require('./connection');
-const { serializeAllSales, serializeById } = require('../utils');
+// const { serializeAllSales, serializeById } = require('../utils');
 
 const getAllSales = async () => {
   return await connection.execute(
