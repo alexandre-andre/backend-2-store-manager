@@ -1,12 +1,8 @@
 const sinon = require('sinon');
-const chai = require('chai');
-const { expect } = chai;
-// const chaiHttp = require('chai-http');
-
+const { expect } = require('chai');
 const SalesModel = require('../../../models/salesModel');
 const SalesService = require('../../../services/salesService');
-const { connection } = require('../../../models/connection')
-const { mockSales, mockAllSales, mockAllSalesSerialized, mockSalesProducts } = require('../../mock');
+const { mockAllSales } = require('../../mock');
 
 describe('SERVICES SALES', () => {
   describe('Verifica getAllsales', () => {
@@ -19,13 +15,13 @@ describe('SERVICES SALES', () => {
       SalesModel.getAllSales.restore();
     });
 
-    it('retorna todas as vendas', async () => {
-      const allSales = await SalesService.getAllsales(mockAllSales);  
+    it('retorna um array', async () => {
+      const allSales = await SalesService.getAllsales();  
       expect(allSales).to.be.an('array');
     });
 
-    it('retorna todas as vendas', async () => {
-      const allSales = await SalesService.getAllsales(mockAllSales);  
+    it('retorna um aray de tamanho x', async () => {
+      const allSales = await SalesService.getAllsales();  
       expect(allSales).to.be.length(3);
     });
   });

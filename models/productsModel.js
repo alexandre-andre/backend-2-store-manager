@@ -2,8 +2,8 @@
 const { connection } = require('./connection');
 
 const getAllProducts = async () => {
-  return await connection.execute('SELECT * FROM StoreManager.products;');
-  // return allProducts;
+  const result = await connection.execute('SELECT * FROM StoreManager.products;');
+  return result;
 };
 
 const getProductById = async (id) => {
@@ -34,7 +34,9 @@ const postProductdByName = async (name, quantity) => {
 
 const putProduct = async (id, name, quantity) => {
   const query = 'UPDATE StoreManager.products SET name = ?, quantity = ? WHERE id = ?';
-  return await connection.execute(query, [name, quantity, id]);
+  const result = await connection.execute(query, [name, quantity, id]);
+  console.log('>>>>>>>>>>>>>>>>> ', result);
+  return result;
 };
 
 const deleteProductById = async (id) => {

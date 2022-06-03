@@ -1,26 +1,29 @@
-const route = require('express').Router();
+const routerSales = require('express').Router();
 const { map } = require('modern-async');
 const rescue = require('express-rescue');
 const { middlewareSalesValidation } = require('../middlewares/salesMiddleware');
 const SalesService = require('../services/salesService');
 const { STATUS, MSG_SALE } = require('../utils');
-const { serializeAllSales, serializeById } = require('../utils');
+const serialize = require('../utils');
 
 const { OK, CREATED, NO_CONTENT, NOT_FOUND } = STATUS;
 
-route.get('/', async (_req, res) => {
+const getAllSales = async (_req, res) => {
   const [allsales] = await SalesService.getAllsales();
-  res.status(OK).json(serializeAllSales(allsales));
-});
+  // console.log('<< CONTROLLER >> ', allsales);
+  return res.status(OK).json(serialize.serializeAllSales(allsales));
+};
 
-route.get('/:id', async (req, res) => {
+routerSales.get('/', (req, res) => getAllSales(req, res));
+
+routerSales.get('/:id', async (req, res) => {
   const { id } = req.params;
   const findsale = await SalesService.getSaleById(id);
   if (!findsale.length) return res.status(NOT_FOUND).json({ message: MSG_SALE.NOT_FOUND });
   res.status(OK).json(findsale);
 });
 
-route.post('/', middlewareSalesValidation, rescue(async (req, res) => {
+routerSales.post('/', middlewareSalesValidation, rescue(async (req, res) => {
   const idSale = await SalesService.registerSale();
   const mapSales = await map(
     req.body, async (e) => SalesService.postSale(idSale, e.productId, e.quantity),
@@ -36,7 +39,7 @@ route.post('/', middlewareSalesValidation, rescue(async (req, res) => {
   res.status(CREATED).json(postsSales);
 }));
 
-route.put('/:id', middlewareSalesValidation, rescue(async (req, res) => {
+routerSales.put('/:id', middlewareSalesValidation, rescue(async (req, res) => {
   const { id } = req.params;
   const saleId = Number(id);
   const mapPutsSales = await Promise.all(
@@ -48,7 +51,7 @@ route.put('/:id', middlewareSalesValidation, rescue(async (req, res) => {
   res.status(OK).json(putsSales);
 }));
 
-route.delete('/:id', async (req, res) => {
+routerSales.delete('/:id', async (req, res) => {
   const { id } = req.params;
   const saleId = await SalesService.getSaleById(id);
 
@@ -59,4 +62,7 @@ route.delete('/:id', async (req, res) => {
   res.status(NO_CONTENT).end();
 });
 
-module.exports = route;
+module.exports = {
+  routerSales,
+  getAllSales,
+};

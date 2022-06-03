@@ -1,5 +1,5 @@
 const express = require('express');
-const routes = require('./routes');
+const { routerProduct, routerSales } = require('./routes');
 
 const app = express();
 app.use(express.json());
@@ -9,8 +9,8 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
-app.use('/products', routes.ProductController);
-app.use('/sales', routes.SalesController);
+app.use('/products', routerProduct);
+app.use('/sales', routerSales);
 
 // app.use((err, _req, res, _next) => {
 //   return res.status(err.status || 500).json({ message: err.message });

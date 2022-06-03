@@ -1,16 +1,10 @@
 const sinon = require('sinon');
-const chai = require('chai');
-const { expect, should } = chai;
-// const chaiHttp = require('chai-http');
-
+const { expect } = require('chai');
 const ProductsModel = require('../../../models/productsModel');
 const { connection } = require('../../../models/connection')
 const { mockProducts } = require('../../mock');
-const req = require('express/lib/request');
 
-// const url = 'http://localhost:3000';
-
-// chai.use(chaiHttp)
+const id = 1;
 const name = 'smeagol';
 const quantity = 50;
 
@@ -18,7 +12,7 @@ describe('MODELS PROUCTS', () => {
   describe('verifica getAllProducts', () => {
     beforeEach(() => {
       sinon.stub(connection, 'execute').resolves(mockProducts);
-      console.log(mockProducts);
+      // console.log(mockProducts);
     });
     
     afterEach(() => {
@@ -36,14 +30,14 @@ describe('MODELS PROUCTS', () => {
   describe('verifica getProductById', () => {
     beforeEach(() => {
       sinon.stub(connection, 'execute').resolves([mockProducts]);
-      console.log([mockProducts]);
+      // console.log([mockProducts]);
     });
   
     afterEach(() => {
       connection.execute.restore();
     });
 
-    it('Testa getProductById', async () => {
+    it('se retorna um objeto', async () => {
       const products = await ProductsModel.getProductById(1);
       
       expect(products).to.be.an('object');
@@ -74,9 +68,19 @@ describe('MODELS PROUCTS', () => {
   //   expect(biscoito).to.deep.equal({ id: 1, name, quantity });
   // });
 
-  // it('Testa deleteProductById', async () => {
-  //   const produto = await ProductsModel.deleteProductById(1);
+  // describe('Verifica deleteProductById', () => {
+  //   before(() => {
+  //     sinon.stub(connection, 'execute').resolves({id: 1, name, quantity });
+  //   });
 
-  //   expect(produto).to.be.null;
+  //   it('se o item foi editado', async () => {
+  //     const produto = await ProductsModel.putProduct(id, name, quantity);
+  
+  //     expect(produto).to.be.an('object');
+  //     expect(produto).to.haveOwnProperty('id');
+  //     expect(produto).to.haveOwnProperty('name');
+  //     expect(produto).to.haveOwnProperty('quantity');
+  //   });
   // });
+
 });

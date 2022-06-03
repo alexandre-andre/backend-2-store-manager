@@ -5,14 +5,13 @@ const { expect } = chai;
 
 const ProductsModel = require('../../../models/productsModel');
 const ProductsService = require('../../../services/productService');
-const { connection } = require('../../../models/connection')
-const { mockAllProducts } = require('../../mock');
+const { mockProducts } = require('../../mock');
 
 describe('SERVICES PRODUCTS', () => {
   describe('Verifica getAllProducts', () => {
     beforeEach(() => {
-      sinon.stub(ProductsModel, 'getAllProducts').resolves(mockAllProducts);
-      console.log('DESCRIBE: ', mockAllProducts);
+      sinon.stub(ProductsModel, 'getAllProducts').resolves([mockProducts]);
+      // console.log('DESCRIBE: ', [mockAllProducts]);
     });
     
     afterEach(() => {
@@ -20,38 +19,40 @@ describe('SERVICES PRODUCTS', () => {
     });
 
     it('retorna todas os produtos', async () => {
-      const allProducts = await ProductsService.getAllProducts(mockAllProducts);  
-      console.log('>>>>', allProducts);
+      const allProducts = await ProductsService.getAllProducts();  
+      // console.log('>>>>', allProducts);
       expect(allProducts).to.be.an('array');
+      expect(allProducts).to.be.length(3);
     });
 
-    // it('retorna todas os produtos', async () => {
-    //   const allSales = await SalesService.getAllsales(mockAllSales);  
-    //   expect(allSales).to.be.length(3);
-    // });
   });
+  
+  describe('Verifica getProductById', () => {
+    before(() => {
+      sinon.stub(ProductsModel, 'getProductById')
+        .onFirstCall().resolves(null)
+        .onSecondCall().resolves(mockProducts[0]);
+    });
 
-  // describe('Verifica getSaleById', () => {
-  //   const serializeById = (array) => array.map((e) => ({
-  //     date: e.date,
-  //     productId: e.product_id,
-  //     quantity: e.quantity,
-  //   }));
+    after(() => {
+      ProductsModel.getProductById.restore();
+    })
 
-  //   beforeEach(() => {
-  //     sinon.stub(ProductsModel, 'getSaleById').resolves([serializeById(mockSalesProducts)[2]]);    
-  //   });
-    
-  //   afterEach(() => {
-  //     ProductsModel.getSaleById.restore();
-  //   });
+    it('quando um produto nao existe', async () => {
+      const product = await ProductsService.getProductById(999);
+  
+      expect(product).to.be.null;
+    });
 
-  //   it('retorna venda pelo id', async () => {
-  //     const sale = await SalesService.getSaleById(1);
-  //     console.log('>>>>>>', sale);
-  //     expect(sale).to.be.an('array');
-  //   });
-  // });
+    it('se retorna venda pelo id', async () => {
+      const product = await ProductsService.getProductById(1);
+      
+      expect(product).to.be.an('object');
+      expect(product).to.haveOwnProperty('id');
+      expect(product).to.haveOwnProperty('name');
+      expect(product).to.haveOwnProperty('quantity');
+    });
+  });
 
   // describe('Verifica registerSale', () => {
   //   beforeEach(() => {

@@ -52,7 +52,7 @@ describe('MODELS SALES', () => {
     });
   });
 
-  describe('registerSale', () => {
+  describe('Verifica registerSale', () => {
     beforeEach(() => {
       sinon.stub(connection, 'execute').resolves(mockSales[0]);
     });
@@ -61,11 +61,12 @@ describe('MODELS SALES', () => {
       connection.execute.restore();
     });
 
-    it('Testa registerSale', async () => {
+    it('se retorna um objeto', async () => {
       const newSale = await SalesModel.registerSale();
       
       expect(newSale).to.be.an('object');
-      expect(newSale).to.have.property('id')
+      expect(newSale).to.haveOwnProperty('id');
+      expect(newSale).to.haveOwnProperty('date');
     });
   });
 

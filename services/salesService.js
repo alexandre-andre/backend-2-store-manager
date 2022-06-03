@@ -1,11 +1,10 @@
 const SalesModel = require('../models/salesModel');
 const ProductsModel = require('../models/productsModel');
-const { serializeAllSales, serializeById } = require('../utils');
-// const { middlewareSalesValidation } = require('../middlewares/salesMiddleware');
-// const { salesValidation } = require('../validations/salesValidation');
+const serialize = require('../utils');
 
 const getAllsales = async () => {
   const sales = await SalesModel.getAllSales();
+  console.log('<< CAMADA SERVICES >> ', sales);
   return sales;
 };
 
@@ -14,7 +13,7 @@ const getSaleById = async (id) => {
 
   if (!sales) return null;
 
-  return serializeById(sales);
+  return serialize.serializeById(sales);
 };
 
 const registerSale = async () => {
