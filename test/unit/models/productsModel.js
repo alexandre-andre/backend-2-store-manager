@@ -19,7 +19,7 @@ describe('MODELS PROUCTS', () => {
       connection.execute.restore();
     });
     
-    it('Testa getAllProducts', async () => {
+    it('se retorna um array', async () => {
       const products = await ProductsModel.getAllProducts();
       
       expect(products).to.be.an('array');
@@ -48,39 +48,67 @@ describe('MODELS PROUCTS', () => {
 
     it('Testa getProductByName', async () => {
       const martelo = await ProductsModel.getProductByName('Martelo');
-
+  
       expect(martelo).to.be.an('object');
       expect(martelo).to.deep.equal(mockProducts[0]);
     });
   });
 
-  // it('Testa postProductdByName', async () => {
-  //   const smeagol = await ProductsModel.postProductdByName(name, quantity);
-
-  //   console.log('>>>>>>', smeagol);
-  //   expect(smeagol).to.be.an('object');
-  //   expect(smeagol).to.deep.equal({ id: 4, name, quantity });
-  // });
-
-  // it('Testa putProduct', async () => {
-  //   const [put] = await ProductsModel.putProduct(1, 'smeagol', quantity);
-  //   console.log('PUT: ', put);
-  //   expect(biscoito).to.deep.equal({ id: 1, name, quantity });
-  // });
-
-  // describe('Verifica deleteProductById', () => {
+  // describe('Verifica postProductByName', () => {
   //   before(() => {
-  //     sinon.stub(connection, 'execute').resolves({id: 1, name, quantity });
+  //     sinon.stub(ProductsModel, 'postProductdByName').resolves(null)
+  //       // .onSecondCall().resolves([mockProducts]);
+
+  //     // sinon.stub(connection, 'execute').resolves(null);
+  //     });
+
+  //   after(() => {
+  //     ProductsModel.postProductdByName.restore();
+  //     // sinon.connection.restore();
+  //   });
+    
+  //   it('se o produto ja existir, deve retornar null', async () => {
+  //     let a = await ProductsModel.postProductdByName('Martelo', 99)
+  //     let aa = await ProductsModel.getProductByName('Martelo');
+  //     console.log(a, aa);
+  //     expect(a).to.be.null;
   //   });
 
-  //   it('se o item foi editado', async () => {
-  //     const produto = await ProductsModel.putProduct(id, name, quantity);
-  
-  //     expect(produto).to.be.an('object');
-  //     expect(produto).to.haveOwnProperty('id');
-  //     expect(produto).to.haveOwnProperty('name');
-  //     expect(produto).to.haveOwnProperty('quantity');
-  //   });
+  //   /** AQUI FALTA O RETORNO QDO O PRODUTOR EH INSERIDO */
+  //   // it('se o produto nao existir deve retornar um novo objeto', async () => {
+  //   //   let smeagol2 = await ProductsModel.postProductdByName('Martelo', 10);
+  //   //   // await ProductsModel.getProductByName('Martelo');
+  //   //   expect(smeagol2).to.be.an('object');
+  //   // });
   // });
 
+  
+  describe('Verifica putProdut', () => {
+    before(() => {
+      sinon.stub(connection, 'execute').resolves({ id, name, quantity });
+    });
+
+    after(() => { connection.execute.restore() });
+
+    it('se o produto é editado', async () => {
+      const put = await ProductsModel.putProduct(id, name, quantity);
+      
+      expect(put).to.be.an('object');
+    });
+  });
+  
+  /** POR QUE QUEBRA A SALES MODEL ??  
+   */
+  describe('Verifica deleteProductById', () => {
+    before(() => {
+      sinon.stub(connection, 'execute').resolves(null);
+    });
+    
+    after(() => { connection.execute.restore() });
+
+    it('se o item foi editado', async () => {
+      const produto = await ProductsModel.deleteProductById(id);
+        expect(produto).to.be.null;
+    });
+  });
 });

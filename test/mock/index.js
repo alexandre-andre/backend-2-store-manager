@@ -89,10 +89,18 @@ const mockAllSalesSerialized = [
   }
 ];
 
+const mockSalesProductsUpdate = {
+  saleId: 1,
+  date: '2022-06-01T15:30:24.000Z',
+  productId: 1,
+  quantity: 50
+};
+
 module.exports = {
   mockProducts,
   mockSales,
   mockSalesProducts,
   mockAllSales, 
   mockAllSalesSerialized,
+  mockSalesProductsUpdate,
 };

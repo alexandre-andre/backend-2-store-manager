@@ -56,5 +56,4 @@ describe('CONTROLLER PRODUCTS', () => {
   //     // expect(product).to.be.an('object');
   //   });
   // });
-
 });

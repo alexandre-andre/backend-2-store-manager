@@ -1,28 +1,21 @@
 const sinon = require('sinon');
 const chai = require('chai');
 const { expect } = chai;
-// const chaiHttp = require('chai-http');
-
 const SalesModel = require('../../../models/salesModel');
-const ProducsModel = require('../../../models/productsModel');
 const { connection } = require('../../../models/connection')
 const { mockSales, mockAllSales, mockSalesProducts } = require('../../mock');
-
-// const url = 'http://localhost:3000';
-
-// chai.use(chaiHttp)
 
 describe('MODELS SALES', () => {
   describe('Verifica getAllSales e getSalesById', () => {
     beforeEach(() => {
-      sinon.stub(connection, 'execute').resolves(mockAllSales);
+      sinon.stub(connection, 'execute').resolves(mockAllSales)
     });
   
     afterEach(() => {
       connection.execute.restore();
     });
   
-    it('Verifica getAllSales', async () => {
+    it('se getAllSales retorna um array com todos as vendas', async () => {
       const sales = await SalesModel.getAllSales();
 
       expect(sales).to.be.an('array');
@@ -33,37 +26,28 @@ describe('MODELS SALES', () => {
       expect(sales[0]).to.have.property('quantity');
     });
 
-    it('Verifica getSaleById', async () => {
-      const sales = await SalesModel.getSaleById(1);
-      const pa = sales.filter(e => e.sale_id === 2);
+    it('se getSaleById retorna um array de objetos pelo id', async () => {
+      const sales = await SalesModel.getSaleById(2);
 
-      expect(sales).to.be.an('array');
-      expect(sales[0]).to.have.property('sale_id');
-      expect(sales[0]).to.have.property('date');
-      expect(sales[0]).to.have.property('product_id');
-      expect(pa).to.deep.equal([
-        {
-          "sale_id": 2,
-          "date": "2022-06-01T15:30:24.000Z",
-          "product_id": 3,
-          "quantity": 15
-        }
-      ]);
+      expect(sales[2]).to.be.an('object');
+      expect(sales[2]).to.have.property('sale_id');
+      expect(sales[2]).to.have.property('date');
+      expect(sales[2]).to.have.property('product_id');
     });
   });
 
   describe('Verifica registerSale', () => {
-    beforeEach(() => {
+    before(() => {
       sinon.stub(connection, 'execute').resolves(mockSales[0]);
     });
   
-    afterEach(() => {
+    after(() => {
       connection.execute.restore();
     });
 
     it('se retorna um objeto', async () => {
       const newSale = await SalesModel.registerSale();
-      
+
       expect(newSale).to.be.an('object');
       expect(newSale).to.haveOwnProperty('id');
       expect(newSale).to.haveOwnProperty('date');
@@ -71,17 +55,17 @@ describe('MODELS SALES', () => {
   });
 
   describe('registerSale', () => {
-    beforeEach(() => {
+    before(() => {
       sinon.stub(connection, 'execute').resolves(mockSalesProducts[0]);
     });
   
-    afterEach(() => {
+    after(() => {
       connection.execute.restore();
     });
 
     it('Testa postSale', async () => {
       const newSale = await SalesModel.postSale(1, 1, 5);
-      // console.log('newSale: ', newSale);
+
       expect(newSale).to.be.an('object');
       expect(newSale).to.have.property('product_id');
       expect(newSale).to.have.property('quantity');
@@ -89,57 +73,92 @@ describe('MODELS SALES', () => {
     });
   });
 
-  // it('Testa putSale', async () => {
-  //   const put = await SalesModel.putSale(1, 1, 500);
-  //   // console.log('PUT: ', put);
-  //   expect(put).to.be.an('object');
-  //   expect(put).to.have.property('product_id');
-  //   expect(put).to.have.property('quantity');
-  //   expect(put).to.deep.equal({ product_id: 1, quantity: 500 });
-  // });
+  describe('Verifica putSale', () => {
+    before(() => {
+      sinon.stub(connection, 'execute').resolves(mockAllSales[0]);
+    });
+
+    after(() => {
+      connection.execute.restore();
+    });
+
+    it('se o produto é editado', async () => {
+      const put = await SalesModel.putSale(1, 1, 5);
+
+      expect(put).to.be.an('object');
+      expect(put).to.have.property('product_id');
+      expect(put).to.have.property('quantity');
+    });
+  });
   
-  // it('Testa deleteSaleFromSales', async () => {
-  //   let product = await SalesModel.getSalesById(1);
-  //   console.log('ANTES: ', product);
+  describe('Verifica deleteSaleFromSales', () => {
+    before(() => {
+      sinon.stub(connection, 'execute').resolves(mockSales[1]);
+    });
+
+    after(() => {
+      connection.execute.restore();
+    });
+
+    it('se retorna o objeto que será excluído', async () => {
+      const dfs = await SalesModel.deleteSaleFromSales(2);
+
+      expect(dfs).to.be.an('object');
+      expect(dfs).to.have.property('id');
+      expect(dfs).to.have.property('date');
+    });
+  });
+
+  describe('Verifica deleteSaleFromSalesProducts', () => {
+    before(() => {
+      sinon.stub(connection, 'execute').resolves(mockSalesProducts[2]);
+    });
+
+    after(() => {
+      connection.execute.restore();
+    });
+
+    it('se retorna o objeto que será excluído', async () => {
+      const dfsp = await SalesModel.deleteSaleFromSalesProducts(2);
+
+      expect(dfsp).to.be.an('object');
+      expect(dfsp).to.have.property('sale_id');
+      expect(dfsp).to.have.property('product_id');
+      expect(dfsp).to.have.property('quantity');
+    });
+  });
+
+  describe('Verifica updateStockUp', () => {
+    before(() => {
+      sinon.stub(connection, 'execute').resolves({ id: 99, name: 'smeagol', quantity: 99 });
+    });
+
+    after(() => {
+      connection.execute.restore();
+    });
     
-  //   await SalesModel.deleteSaleFromSales(1);
+    it('se retorna um produto aletrado', async () => {
+      const stockUp = await SalesModel.updateStockUp(99, 99);
+      
+      expect(stockUp).to.be.an('object');
+      expect(stockUp).to.include({ quantity: 99 });
+    });
+  });
+  
+  describe('Verifica updateStocDown', () => {
+    before(() => {
+      sinon.stub(connection, 'execute').resolves({ id: 99, name: 'smeagol', quantity: 1 });
+    });
 
-  //   product = await SalesModel.getSalesById(1);
-  //   console.log('DEPOIS: ', product);
-  //   expect(product).to.be.an('array').empty;
-  // });
+    after(() => {
+      connection.execute.restore();
+    });
 
-  // it('Testa deleteSaleFromSalesProducts', async () => {
-  //   let product = await SalesModel.getSalesById(1)
-  //   console.log('ANTES: ', product);
-  //   await SalesModel.deleteSaleFromSalesProducts(1);
-    
-  //   product = await SalesModel.getSalesById(1)
-  //   console.log('DEPOIS: ', product);
-  //   expect(product).to.be.an('array').empty;
-  // });
-
-  // it('Testa updateStockUp', async () => {
-  //   let product = await ProducsModel.getProductById(1);
-  //   let { quantity } = product;
-  //   // console.log('ANTES de editar: ', product);
-  //   await SalesModel.updateStockUp(1, 50);
-  //   // console.log('stockUp: ', stockUp);
-  //   product = await ProducsModel.getProductById(1);
-  //   // console.log('DEPOIS de editar: ', product);
-  //   expect(product).to.include({ quantity: quantity + 50 })
-  // });
-
-  // it('Testa updateStockDown', async () => {
-  //   let product = await ProducsModel.getProductById(1);
-  //   let { quantity } = product;
-  //   // console.log('ANTES de editar: ', product);
-  //   await SalesModel.updateStockDown(1, 50);
-  //   // console.log('SUM: ', sum);
-  //   product = await ProducsModel.getProductById(1);
-  //   // console.log('DEPOIS de editar: ', product);
-  //   expect(product).to.include({ quantity: quantity - 50 });
-  //   // console.log('MOCK: ', mockSales);
-  //   // console.log('mockSalesProductsSerialized: ', mockSalesProductsSerialized);
-  // });
+    it('se retorna um produto alterado', async () => {
+      const stockDown = await SalesModel.updateStockDown(99, 1);
+      
+      expect(stockDown).to.be.an('object');
+      expect(stockDown).to.include({ quantity: 1 });
+    });
+  });
 });

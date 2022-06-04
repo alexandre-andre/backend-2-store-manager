@@ -35,7 +35,6 @@ const postProductdByName = async (name, quantity) => {
 const putProduct = async (id, name, quantity) => {
   const query = 'UPDATE StoreManager.products SET name = ?, quantity = ? WHERE id = ?';
   const result = await connection.execute(query, [name, quantity, id]);
-  console.log('>>>>>>>>>>>>>>>>> ', result);
   return result;
 };
 
