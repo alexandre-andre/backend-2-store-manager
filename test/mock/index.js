@@ -15,8 +15,9 @@ const mockProducts =   [
     quantity: 30
   }
 ];
-
-const currentDate = new Date().toISOString().slice(0, 10).replace(/-/g, '/');
+const date = new Date().toISOString();
+const currentDate = date.slice(0, 10).replace(/-/g, '/');
+// const extendedCurrentDate = new Date().toISOString();
 
 const mockSales = [
   {
@@ -50,19 +51,19 @@ const mockSalesProducts = [
 const mockAllSales = [
   {
     sale_id: 1,
-    date: '2022-06-01T15:30:24.000Z',
+    date,
     product_id: 1,
     quantity: 5
   },
   {
     sale_id: 1,
-    date: '2022-06-01T15:30:24.000Z',
+    date,
     product_id: 2,
     quantity: 10
   },
   {
     sale_id: 2,
-    date: '2022-06-01T15:30:24.000Z',
+    date,
     product_id: 3,
     quantity: 15
   }
@@ -71,19 +72,19 @@ const mockAllSales = [
 const mockAllSalesSerialized = [
   {
     saleId: 1,
-    date: '2022-06-01T15:30:24.000Z',
+    date,
     productId: 1,
     quantity: 5
   },
   {
     saleId: 1,
-    date: '2022-06-01T15:30:24.000Z',
+    date,
     productId: 2,
     quantity: 10
   },
   {
     saleId: 2,
-    date: '2022-06-01T15:30:24.000Z',
+    date,
     productId: 3,
     quantity: 15
   }
@@ -91,7 +92,7 @@ const mockAllSalesSerialized = [
 
 const mockSalesProductsUpdate = {
   saleId: 1,
-  date: '2022-06-01T15:30:24.000Z',
+  date,
   productId: 1,
   quantity: 50
 };

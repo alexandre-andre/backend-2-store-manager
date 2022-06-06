@@ -9,8 +9,6 @@ const getAllProducts = async (_req, res) => {
   return res.status(STATUS.OK).json(allProducts);
 };
 
-routerProduct.get('/', (req, res) => getAllProducts(req, res));
-
 const getById = async (req, res) => {
   const { id } = req.params;
   const findProduct = await ProductService.getProductById(id);
@@ -18,18 +16,14 @@ const getById = async (req, res) => {
   res.status(STATUS.OK).json(findProduct);
 };
 
-routerProduct.get('/:id', (req, res) => getById(req, res));
-
-const create = async (req, res) => {
+const createProd = async (req, res) => {
   const { name, quantity } = req.body;
   const newProduct = await ProductService.postProductdByName(name, quantity);
   if (!newProduct) return res.status(STATUS.CONFLICT).json({ message: MSG_PRODUCT.ALREADY_EXISTS });
   res.status(STATUS.CREATED).json(newProduct);
 };
 
-routerProduct.post('/', middlewareProductsValidation, rescue((req, res) => create(req, res)));
-
-routerProduct.put('/:id', middlewareProductsValidation, rescue(async (req, res) => {
+const putProduct = async (req, res) => {
   const { id } = req.params;
   const { name, quantity } = req.body;
   
@@ -39,19 +33,28 @@ routerProduct.put('/:id', middlewareProductsValidation, rescue(async (req, res) 
   
   const productEdited = await ProductService.putProduct(id, name, quantity);
   res.status(STATUS.OK).json(productEdited);
-}));
+};
 
-routerProduct.delete('/:id', async (req, res) => {
+const deleteProduct = async (req, res) => {
   const { id } = req.params;
   const product = await ProductService.getProductById(id);
   if (!product) res.status(STATUS.NOT_FOUND).json({ message: MSG_PRODUCT.NOT_FOUND });
-
+  
   await ProductService.deleteProductById(id);
   res.status(STATUS.NO_CONTENT).end();
-});
+};
+
+routerProduct.get('/', (req, res) => getAllProducts(req, res));
+routerProduct.get('/:id', (req, res) => getById(req, res));
+routerProduct.post('/', middlewareProductsValidation, rescue((req, res) => createProd(req, res)));
+routerProduct.put('/:id', middlewareProductsValidation, rescue((req, res) => putProduct(req, res)));
+routerProduct.delete('/:id', (req, res) => deleteProduct(req, res));
 
 module.exports = {
   routerProduct,
   getAllProducts,
   getById,
+  createProd,
+  putProduct,
+  deleteProduct,
 };

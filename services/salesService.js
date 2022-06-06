@@ -10,7 +10,7 @@ const getAllsales = async () => {
 
 const getSaleById = async (id) => {
   const [sales] = await SalesModel.getSaleById(id);
-  console.log('O QUE SERA TESTADO em  getSaleById? ', serialize.serializeById(sales));
+  console.log('O QUE SERA TESTADO em  getSaleById? ', sales);
   if (!sales) return null;
 
   return serialize.serializeById(sales);
@@ -38,7 +38,7 @@ const postSale = async (saleId, productId, quantity) => {
 
 const putSale = async (saleId, productId, quantity) => {
   const sales = await getSaleById(saleId);
-  console.log('O QUE SERA TESTADO em  putSale? ', response);
+  console.log('O QUE SERA TESTADO em  putSale? ', sales);
   const findSale = sales.find((e) => e.productId === productId);
   
   const quantityToReintegrate = findSale.quantity - quantity;

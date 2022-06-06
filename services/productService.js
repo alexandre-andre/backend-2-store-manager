@@ -2,7 +2,7 @@ const ProductsModel = require('../models/productsModel');
 
 const getAllProducts = async () => {
   const [response] = await ProductsModel.getAllProducts();
-  // console.log('O QUE SERA TESTADO em  getAllProducts? ', response);
+  console.log('O QUE SERA TESTADO em  getAllProducts? ', response);
   return response;
 };
 

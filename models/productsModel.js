@@ -22,6 +22,7 @@ const getProductByName = async (name) => {
 
 const postProductdByName = async (name, quantity) => {
   let productByName = await getProductByName(name);
+  console.log('O QUE SERA VERIFICADO ?', productByName);
   if (productByName) return null;
 
   await connection.execute(

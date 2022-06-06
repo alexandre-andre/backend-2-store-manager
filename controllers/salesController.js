@@ -14,16 +14,14 @@ const getAllSales = async (_req, res) => {
   return res.status(OK).json(serialize.serializeAllSales(allsales));
 };
 
-routerSales.get('/', (req, res) => getAllSales(req, res));
-
-routerSales.get('/:id', async (req, res) => {
+const getSaleById = async (req, res) => {
   const { id } = req.params;
   const findsale = await SalesService.getSaleById(id);
   if (!findsale.length) return res.status(NOT_FOUND).json({ message: MSG_SALE.NOT_FOUND });
   res.status(OK).json(findsale);
-});
+};
 
-routerSales.post('/', middlewareSalesValidation, rescue(async (req, res) => {
+const postSale = async (req, res) => {
   const idSale = await SalesService.registerSale();
   const mapSales = await map(
     req.body, async (e) => SalesService.postSale(idSale, e.productId, e.quantity),
@@ -37,9 +35,9 @@ routerSales.post('/', middlewareSalesValidation, rescue(async (req, res) => {
   const postsSales = { id: idSale, itemsSold: mapSales };
 
   res.status(CREATED).json(postsSales);
-}));
+};
 
-routerSales.put('/:id', middlewareSalesValidation, rescue(async (req, res) => {
+const putSale = async (req, res) => {
   const { id } = req.params;
   const saleId = Number(id);
   const mapPutsSales = await Promise.all(
@@ -49,9 +47,9 @@ routerSales.put('/:id', middlewareSalesValidation, rescue(async (req, res) => {
   const putsSales = { saleId, itemUpdated: mapPutsSales };
   
   res.status(OK).json(putsSales);
-}));
+};
 
-routerSales.delete('/:id', async (req, res) => {
+const deleteSale = async (req, res) => {
   const { id } = req.params;
   const saleId = await SalesService.getSaleById(id);
 
@@ -60,9 +58,19 @@ routerSales.delete('/:id', async (req, res) => {
   await SalesService.deleteSaleFromSales(id);
 
   res.status(NO_CONTENT).end();
-});
+};
+
+routerSales.get('/', (req, res) => getAllSales(req, res));
+routerSales.get('/:id', (req, res) => getSaleById(req, res));
+routerSales.post('/', middlewareSalesValidation, rescue((req, res) => postSale(req, res)));
+routerSales.put('/:id', middlewareSalesValidation, rescue((req, res) => putSale(req, res)));
+routerSales.delete('/:id', (req, res) => deleteSale(req, res));
 
 module.exports = {
   routerSales,
   getAllSales,
+  getSaleById,
+  postSale,
+  putSale,
+  deleteSale,
 };

@@ -8,7 +8,7 @@ describe('CONTROLLER PRODUCTS', () => {
   const response = {};
   const request = {};
   
-  describe('GET /', async () => {
+  describe('Verifica getAllProducts', async () => {
     before(() => {
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns(mockProducts);
@@ -16,26 +16,26 @@ describe('CONTROLLER PRODUCTS', () => {
       sinon.stub(ProductService, 'getAllProducts').resolves(mockProducts) // retorna esperado
     });
 
-    it('vefirica se retorna todos os produtos', async () => {
+    it('se retorna todos os produtos', async () => {
       const product = await ProductController.getAllProducts(request, response); // recebe res como argumento
       
       expect(product).to.be.an('array').not.empty;
     });
   });
 
-  // describe('GET /:id - QUANDO DA RUIM', async () => {
+  // describe('Verifica getById', async () => {
   //   before(() => {
   //     request.body = {};
   
   //     response.status = sinon.stub().returns(response);
   //     response.send = sinon.stub().returns('Product not found!');
-  
-  //     sinon.stub(ProductController, 'getById').resolves(null);
+  //     console.log('DESCRIBE: ',response.send());
+  //     sinon.stub(ProductService, 'getProductById').resolves(null); // retorna esperado
   //   });
 
-  //   it('quando o produto nao existe', async() => {
-  //     const product = await ProductController.getById(request, response);
-      
+  //   it('se retorna um produto', async() => {
+  //     const product = await ProductController.getById(request, response); // recebe res como argumento
+  //     console.log('>>>>>', product);
   //     expect(product).to.be.an('object');
   //   });
   // });

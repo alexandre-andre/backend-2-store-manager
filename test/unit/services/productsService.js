@@ -11,8 +11,9 @@ describe('SERVICES PRODUCTS', () => {
   /** NAO FUNCIONA */
   // describe('Verifica getAllProducts', () => {
   //   beforeEach(() => {
-  //     sinon.stub(ProductsModel, 'getAllProducts').resolves([mockProducts]);
-  //     // console.log('DESCRIBE: ', [mockAllProducts]);
+  //     sinon.stub(ProductsModel, 'getAllProducts').resolves(mockProducts);
+  //     console.log('DESCRIBE: ', [mockProducts]);
+  //     console.log('DESCRIBE 2: ', mockProducts);
   //   });
     
   //   afterEach(() => {
@@ -21,9 +22,9 @@ describe('SERVICES PRODUCTS', () => {
 
   //   it('retorna todas os produtos', async () => {
   //     const allProducts = await ProductsService.getAllProducts();  
-  //     // console.log('>>>>', allProducts);
+  //     console.log('>>>>', allProducts);
   //     expect(allProducts).to.be.an('array');
-  //     expect(allProducts).to.be.length(3);
+      // expect(allProducts).to.be.length(3);
   //   });
   // });
   
