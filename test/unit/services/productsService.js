@@ -9,24 +9,23 @@ const { mockProducts } = require('../../mock');
 
 describe('SERVICES PRODUCTS', () => {
   /** NAO FUNCIONA */
-  // describe('Verifica getAllProducts', () => {
-  //   beforeEach(() => {
-  //     sinon.stub(ProductsModel, 'getAllProducts').resolves(mockProducts);
-  //     console.log('DESCRIBE: ', [mockProducts]);
-  //     console.log('DESCRIBE 2: ', mockProducts);
-  //   });
+  describe('Verifica getAllProducts', () => {
+    beforeEach(() => {
+      sinon.stub(ProductsModel, 'getAllProducts').resolves([mockProducts]);
+      // console.log('DESCRIBE 2: ', mockProducts);
+    });
     
-  //   afterEach(() => {
-  //     ProductsModel.getAllProducts.restore();
-  //   });
+    afterEach(() => {
+      ProductsModel.getAllProducts.restore();
+    });
 
-  //   it('retorna todas os produtos', async () => {
-  //     const allProducts = await ProductsService.getAllProducts();  
-  //     console.log('>>>>', allProducts);
-  //     expect(allProducts).to.be.an('array');
-      // expect(allProducts).to.be.length(3);
-  //   });
-  // });
+    it('retorna todas os produtos', async () => {
+      const allProducts = await ProductsService.getAllProducts();  
+      // console.log('>>>>', allProducts);
+      expect(allProducts).to.be.an('array');
+      expect(allProducts).to.be.length(3);
+    });
+  });
   
   describe('Verifica getProductById', () => {
     before(() => {
@@ -57,10 +56,7 @@ describe('SERVICES PRODUCTS', () => {
 
   describe('Verifica getProductByName', () => {
     beforeEach(() => {
-      sinon.stub(ProductsModel, 'getProductByName')
-        .onFirstCall().resolves(null)
-        .onSecondCall().resolves({ id: 4, name: 'Arco do Gavião Arqueiro', quantity: 1 });
-        // console.log('DESCRIBE: ', { id: 4, name: 'Arco do Gavião Arqueiro', quantity: 1 });
+      sinon.stub(ProductsModel, 'getProductByName').resolves(null);
     });
 
     afterEach(() => {
@@ -71,16 +67,26 @@ describe('SERVICES PRODUCTS', () => {
       const nonExist = await ProductsService.getProductByName('xxx');
       expect(nonExist).to.be.null;
     });
+  });
 
-    /** NAO FUNCIONA */
-    // it('se retorna um produto quando existe', async () => {
-    //   const product = await ProductsService.getProductByName('Arco do Gavião Arqueiro');      
-    //   console.log('IT: ', product);
-    //   expect(product).to.be.an('object');
-    //   expect(product2).to.haveOwnProperty('id');
-    //   expect(product2).to.haveOwnProperty('name');
-    //   expect(product2).to.haveOwnProperty('quantity');
-    // });
+  describe('Verifica getProductByName', () => {
+    beforeEach(() => {
+      sinon.stub(ProductsModel, 'getProductByName')
+        .resolves({ id: 4, name: 'Arco do Gavião Arqueiro', quantity: 1 });
+    });
+
+    afterEach(() => {
+      ProductsModel.getProductByName.restore();
+    });
+
+    it('se retorna um produto quando existe', async () => {
+      const product = await ProductsService.getProductByName('Arco do Gavião Arqueiro');      
+      // console.log('IT: ', product);
+      expect(product).to.be.an('object');
+      expect(product).to.haveOwnProperty('id');
+      expect(product).to.haveOwnProperty('name');
+      expect(product).to.haveOwnProperty('quantity');
+    });
   });
 
   describe('Verifica postProductdByName', () => {

@@ -56,30 +56,28 @@ describe('MODELS PROUCTS', () => {
 
   // describe('Verifica postProductByName', () => {
   //   before(() => {
-  //     sinon.stub(ProductsModel, 'postProductdByName').resolves(null)
-  //       // .onSecondCall().resolves([mockProducts]);
-
-  //     // sinon.stub(connection, 'execute').resolves(null);
+  //     sinon.stub(ProductsModel, 'getProductByName').resolves(mockProducts[0]);
+  //     sinon.stub(connection, 'execute').resolves(null);
   //     });
 
   //   after(() => {
-  //     ProductsModel.postProductdByName.restore();
-  //     // sinon.connection.restore();
+  //     connection.execute.restore();
+  //     ProductsModel.getProductByName.restore();
+  //     sinon.connection.restore();
   //   });
     
   //   it('se o produto ja existir, deve retornar null', async () => {
-  //     let a = await ProductsModel.postProductdByName('Martelo', 99)
-  //     let aa = await ProductsModel.getProductByName('Martelo');
-  //     console.log(a, aa);
+  //     let a = await ProductsModel.postProductdByName('Martelo', 99);
+  //     console.log(a);
   //     expect(a).to.be.null;
   //   });
 
-  //   /** AQUI FALTA O RETORNO QDO O PRODUTOR EH INSERIDO */
-  //   // it('se o produto nao existir deve retornar um novo objeto', async () => {
-  //   //   let smeagol2 = await ProductsModel.postProductdByName('Martelo', 10);
-  //   //   // await ProductsModel.getProductByName('Martelo');
-  //   //   expect(smeagol2).to.be.an('object');
-  //   // });
+    /** AQUI FALTA O RETORNO QDO O PRODUTOR EH INSERIDO */
+    // it('se o produto nao existir deve retornar um novo objeto', async () => {
+    //   let smeagol = await ProductsModel.postProductdByName('Smeagol', 99);
+    //   // await ProductsModel.getProductByName('Martelo');
+    //   expect(smeagol).to.be.an('object');
+    // });
   // });
 
   
