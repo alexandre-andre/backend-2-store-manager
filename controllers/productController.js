@@ -37,8 +37,8 @@ const putProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
   const { id } = req.params;
-  const product = await ProductService.getProductById(id);
-  if (!product) res.status(STATUS.NOT_FOUND).json({ message: MSG_PRODUCT.NOT_FOUND });
+  const product = await ProductService.getProductById(id); // quando false entra no if
+  if (!product) return res.status(STATUS.NOT_FOUND).json({ message: MSG_PRODUCT.NOT_FOUND });
   
   await ProductService.deleteProductById(id);
   res.status(STATUS.NO_CONTENT).end();

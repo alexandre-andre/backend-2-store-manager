@@ -25,40 +25,44 @@ const getSaleById = async (req, res) => {
 
 const postSale = async (req, res) => {
   const idSale = await SalesService.registerSale();
+  console.log('1', idSale);
   const mapSales = await map(
     req.body, async (e) => SalesService.postSale(idSale, e.productId, e.quantity),
   );
-
+  console.log('2');
   if (mapSales.find((e) => e.status)) {
+    console.log('entrou no if');
     const [{ status, message }] = mapSales;
     return res.status(status).json({ message });
   }
-
+  console.log('3');
   const postsSales = { id: idSale, itemsSold: mapSales };
-
+  console.log('4');
   res.status(CREATED).json(postsSales);
 };
 
 const putSale = async (req, res) => {
   const { id } = req.params;
-  const saleId = Number(id);
+  // const saleId = Number(id);
+  console.log('saleId: ');
   const mapPutsSales = await Promise.all(
-    req.body.map((e) => SalesService.putSale(saleId, e.productId, e.quantity)),
+    req.body.map((e) => SalesService.putSale(+id, e.productId, e.quantity)),
   );
+  console.log('mapPutsSales: ', mapPutsSales);
   
-  const putsSales = { saleId, itemUpdated: mapPutsSales };
-  
+  const putsSales = { saleId: +id, itemUpdated: mapPutsSales };
+  console.log('>> ', putsSales, ' <<');
   res.status(OK).json(putsSales);
 };
 
 const deleteSale = async (req, res) => {
   const { id } = req.params;
   const saleId = await SalesService.getSaleById(id);
-
+  // console.log('1 - ', saleId);
   if (!saleId.length) return res.status(NOT_FOUND).json({ message: MSG_SALE.NOT_FOUND });
-  
+  // console.log('2 - ', saleId);
   await SalesService.deleteSaleFromSales(id);
-
+  // console.log('3');
   res.status(NO_CONTENT).end();
 };
 

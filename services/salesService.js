@@ -4,13 +4,13 @@ const serialize = require('../utils');
 
 const getAllsales = async () => {
   const sales = await SalesModel.getAllSales();
-  console.log('O QUE SERA TESTADO em  getAllsales? ', sales);
+  // console.log('O QUE SERA TESTADO em  getAllsales? ', sales);
   return sales;
 };
 
 const getSaleById = async (id) => {
   const [sales] = await SalesModel.getSaleById(id);
-  console.log('O QUE SERA TESTADO em  getSaleById? ', sales);
+  // console.log('O QUE SERA TESTADO em  getSaleById? ', sales);
   if (!sales) return null;
 
   return serialize.serializeById(sales);
@@ -18,13 +18,13 @@ const getSaleById = async (id) => {
 
 const registerSale = async () => {
   const [{ insertId }] = await SalesModel.registerSale();
-  console.log('O QUE SERA TESTADO em  registerSale? ', insertId);
+  // console.log('O QUE SERA TESTADO em  registerSale? ', insertId);
   return insertId;
 };
 
 const postSale = async (saleId, productId, quantity) => {
   const product = await ProductsModel.getProductById(productId);
-
+  // console.log('PRODUCT >>> ', product);
   if (quantity > product.quantity) {
     return { status: 422, message: 'Such amount is not permitted to sell' };
   }
@@ -32,21 +32,21 @@ const postSale = async (saleId, productId, quantity) => {
   await SalesModel.updateStockDown(productId, quantity);
   
   await SalesModel.postSale(saleId, productId, quantity);
-  console.log('O QUE SERA TESTADO em  postSale? ', { productId, quantity });
+  // console.log('O QUE SERA TESTADO em  postSale? ', { productId, quantity });
   return { productId, quantity };
 };
 
 const putSale = async (saleId, productId, quantity) => {
   const sales = await getSaleById(saleId);
-  console.log('O QUE SERA TESTADO em  putSale? ', sales);
-  const findSale = sales.find((e) => e.productId === productId);
-  
+
+  const findSale = sales.find((e) => e.productId === productId || e.product_id === productId);
+
   const quantityToReintegrate = findSale.quantity - quantity;
 
   await SalesModel.updateStockUp(saleId, quantityToReintegrate);
 
   await SalesModel.putSale(saleId, productId, quantity);
-  console.log('O QUE SERA TESTADO em  putSale? ', { productId, quantity });
+
   return { productId, quantity };
 };
 

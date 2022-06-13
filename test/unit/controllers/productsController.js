@@ -67,12 +67,6 @@ describe('CONTROLLER PRODUCTS', () => {
       await ProductController.getById(request, response); // req e res ja populado pelo before
       expect(response.status.calledWith(200)).to.be.equal(true);
     });
-
-    // it('se é retorna um produto', async() => {
-    //   await ProductController.getById(request, response); // req e res ja populado pelo before
-    //   // console.log('IT >>> ', mockProducts[0])
-    //   expect(response.json.calledWith(mockProducts[0])).to.be.equal(true);
-    // });
   });
 
   describe('Verifica createProd quando da ruim', async () => {
@@ -112,12 +106,6 @@ describe('CONTROLLER PRODUCTS', () => {
 
       expect(response.status.calledWith(201)).to.be.equal(true);
     });
-
-    // it('se retorna o produto criado', async() => {
-    //   await ProductController.createProd(request, response);
-
-    //   expect(response.json.calledWith({ ...request.body, id: 9 })).to.be.equal(true);
-    // });
   });
 
   describe('Verifica putProduct quando NAO OK', async () => {
@@ -167,55 +155,50 @@ describe('CONTROLLER PRODUCTS', () => {
 
       expect(response.status.calledWith(200)).to.be.equal(true);
     });
-
-    // it('se retorna o produto editado', async() => {
-    //   await ProductController.putProduct(request, response);
-
-    //   expect(response.json.calledWith({ id: 9, name: 'Legolas', quantity: 1 })).to.be.equal(true);
-    // });
   });
 
-  // describe('Verifica deleteProduct quando NAO OK', async () => {
+  describe('Verifica deleteProduct quando NAO ok', () => {
+    beforeEach(() => {
+      request.params = 9;
+
+      sinon.stub(ProductService, 'getProductById').resolves(false);
+
+      response.status = sinon.stub().returns(response);
+      response.json = sinon.stub().returns('Product not found');
+    });
+
+    afterEach(() => ProductService.getProductById.restore());
+
+    it('se retorna o status 404', async() => {
+      await ProductController.deleteProduct(request, response);
+
+      expect(response.status.calledWith(404)).to.be.equal(true);
+    });
+
+    it('se retorna a mensagem "Product not found"', async() => {
+      await ProductController.deleteProduct(request, response);
+
+      expect(response.json.calledWith({ message: 'Product not found' })).to.be.equal(true);
+    });
+  });
+
+  // describe('Verifica deleteProduct quando ok', () => {
   //   beforeEach(() => {
   //     request.params = 99;
-      
-  //     sinon.stub(ProductService, 'getProductById').resolves(false);
 
-  //     response.status = sinon.stub().returns(response);
-  //     response.json = sinon.stub().returns({ message: 'Product not found' });
-  //   });
-
-  //   afterEach(() => ProductService.getProductById.restore());
-
-  //   it('se retorna o status 404', async() => {
-  //     await ProductController.deleteProduct(request, response);
-
-  //     expect(response.status.calledWith(404)).to.be.equal(true);
-  //   });
-
-  //   // it('se retorna a mensagem de nao encontrado', async() => {
-  //   //   await ProductController.deleteProduct(request, response);
-
-  //   //   expect(response.status.calledWith({ message: 'Product not found' })).to.be.equal(true);
-  //   // });
-  // });
-
-  // describe('Verifica deleteProduct quando OK', async () => {
-  //   beforeEach(() => {
-  //     request.params = 1;
-      
   //     sinon.stub(ProductService, 'getProductById').resolves(true);
-  //     sinon.stub(ProductService, 'deleteProductById').resolves(true);
+  //     sinon.stub(ProductService, 'deleteProductById').resolves(99);
 
   //     response.status = sinon.stub().returns(response);
+  //     // response.end = sinon.stub().end();
   //   });
 
   //   afterEach(() => {
-  //     ProductService.getProductById.restore();
+  //     ProductService.getProductById.restore(); 
   //     ProductService.deleteProductById.restore();
   //   });
 
-  //   it('se retorna o status 204', async() => {
+  //   it('se retorna o status 204 quando editado', async() => {
   //     await ProductController.deleteProduct(request, response);
 
   //     expect(response.status.calledWith(204)).to.be.equal(true);
